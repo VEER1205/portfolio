@@ -21,27 +21,7 @@ body {
   overflow-x: hidden;
 }
 
-/* === Starfield Background === */
-.stars {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: url('https://i.imgur.com/U5GukXg.png') repeat;
-  z-index: -1;
-  opacity: 0.2;
-  animation: starScroll 100s linear infinite;
-}
 
-@keyframes starScroll {
-  0% {
-    background-position: 0 0;
-  }
-  100% {
-    background-position: 10000px 10000px;
-  }
-}
 
 /* === Navbar === */
 nav {
