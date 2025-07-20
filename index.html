@@ -7,111 +7,74 @@
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
-    <!-- Optional starfield background -->
-    <div class="stars"></div>
-
     <header>
-      <nav>
-        <h1>VEER <span>DODIYA</span></h1>
-        <ul>
-          <li><a href="#home">Home</a></li>
-          <li><a href="#about">About</a></li>
-          <li><a href="#links">Links</a></li>
-        </ul>
+      <nav class="navbar">
+        <div class="nav-container">
+          <h1>VEER <span>DODIYA</span></h1>
+          <div class="menu-toggle">
+            <span class="bar"></span>
+            <span class="bar"></span>
+            <span class="bar"></span>
+          </div>
+          <ul class="nav-links">
+            <li><a href="#home">Home</a></li>
+            <li><a href="#about">About</a></li>
+            <li><a href="#projects">Projects</a></li>
+          </ul>
+        </div>
       </nav>
     </header>
 
     <main>
       <!-- Home Section -->
       <section id="home">
-        <div id="home-content">
+        <div id="home-content" class="auto-show">
           <h2>I AM VEER DODIYA</h2>
           <span id="element"></span>
         </div>
         <div id="home-image">
-          <img
-            src="images/image.png"
-            alt="Placeholder Image"
-          />
+          <img src="images/image.png" alt="Placeholder Image" />
         </div>
       </section>
 
-      <!-- About Section -->
       <!-- About Section -->
       <section id="about">
         <div class="about-wrapper">
           <div class="about-content">
-            <h2 class="section-title">About Me</h2>
-            <p>
+            <h2 class="section-title auto-show">About Me</h2>
+            <p class="auto-show">
               Hi, I'm <strong>Veer Dodiya</strong>, a Computer Science &
               Engineering student at Dwarkadas J. Sanghvi College of
-              Engineering, specializing in <strong>Data Science</strong>.
-              <br /><br />
+              Engineering, specializing in
+              <strong>Data Science</strong>.<br /><br />
               I have experience in:
               <span class="highlight">Python, C++, Java, HTML, CSS</span>, and
               frameworks like
-              <span class="highlight">FastAPI, Flask, CustomTkinter</span>.
-              <br /><br />
+              <span class="highlight">FastAPI, Flask, CustomTkinter</span
+              >.<br /><br />
               I'm passionate about solving problems, whether through code or
               mathematics. In my free time, I enjoy exploring algorithms,
-              challenging myself, and building creative tools.
-              <br /><br />
+              challenging myself, and building creative tools.<br /><br />
               My goal is to become a versatile software developer and data
               scientist, contributing to innovative, real-world projects.
             </p>
-            <a href="VEER DODIYA.pdf" class="glow-button" download
-              >Download Resume</a
-            >
           </div>
+          <a href="VEER DODIYA.pdf" class="glow-button auto-show" download
+            >Download Resume</a
+          >
         </div>
       </section>
 
       <!-- Links and Skills Section -->
-      <section id="links">
-        <div id="linksdiv">
-          <h2 class="section-title">Useful Links</h2>
-          <ul>
-            <li>
-              <a href="https://example.com" target="_blank">Example Link 1</a>
-            </li>
-            <li>
-              <a href="https://example.com" target="_blank">Example Link 2</a>
-            </li>
-            <li>
-              <a href="https://example.com" target="_blank">Example Link 3</a>
-            </li>
-          </ul>
-        </div>
-        <div id="skills">
-          <h2 class="section-title">Skills</h2>
-          <p>Here are some of my skills:</p>
-          <ul>
-            <li>HTML</li>
-            <li>CSS</li>
-            <li>JavaScript</li>
-          </ul>
-        </div>
-      </section>
+      <section id="projects"></section>
     </main>
 
-    <!-- Footer -->
     <footer>
       <p>© 2025 Veer Dodiya — May the source be with you.</p>
     </footer>
 
-    <!-- Load library from the CDN -->
+    <!-- JS Libraries -->
     <script src="https://unpkg.com/typed.js@2.1.0/dist/typed.umd.js"></script>
-
-    <!-- Setup and start animation! -->
-    <script>
-      var typed = new Typed("#element", {
-        strings: [
-          "Web Developer",
-          "Backend Developer",
-          "Compitative Programmer",
-        ],
-        typeSpeed: 40,
-      });
-    </script>
+    <script src="index.js"></script>
   </body>
 </html>
