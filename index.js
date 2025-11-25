@@ -2,7 +2,7 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // 1. TYPING EFFECT (Professional)
     const typedTextSpan = document.getElementById('typed-text');
-    const textArray = ["BACKEND DEVELOPER", "DATA SCIENTIST", "COMPETITIVE PROGRAMMER"];
+    const textArray = ["BACKEND DEVELOPER", "DATA SCIENTIST", "COMPETITIVE PROGRAMMER", "PROBLEM SOLVER"];
     let textIndex = 0;
     let charIndex = 0;
     let isDeleting = false;
@@ -36,7 +36,40 @@ document.addEventListener('DOMContentLoaded', () => {
     
     type();
 
-    // 2. FADE IN ANIMATION
+    // 2. COUNTER ANIMATION FOR STATS
+    const statValues = document.querySelectorAll('.stat-val[data-count]');
+    
+    const animateCounter = (element) => {
+        const target = parseFloat(element.getAttribute('data-count'));
+        const duration = 2000;
+        const increment = target / (duration / 16);
+        let current = 0;
+        const isDecimal = target % 1 !== 0;
+        
+        const updateCounter = () => {
+            current += increment;
+            if (current < target) {
+                element.textContent = isDecimal ? current.toFixed(1) : Math.floor(current);
+                requestAnimationFrame(updateCounter);
+            } else {
+                element.textContent = isDecimal ? target.toFixed(1) : target;
+            }
+        };
+        
+        updateCounter();
+    };
+    
+    const counterObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting && entry.target.textContent === '0') {
+                animateCounter(entry.target);
+            }
+        });
+    }, { threshold: 0.5 });
+    
+    statValues.forEach(el => counterObserver.observe(el));
+
+    // 3. FADE IN ANIMATION
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
@@ -47,7 +80,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
 
-    // 3. MOBILE MENU TOGGLE
+    // 4. MOBILE MENU TOGGLE
     const menuToggle = document.getElementById('mobile-menu');
     const navLinks = document.querySelector('.nav-links');
 
@@ -63,5 +96,48 @@ document.addEventListener('DOMContentLoaded', () => {
             navLinks.style.padding = '20px';
             navLinks.style.borderBottom = '1px solid #333';
         });
+    }
+
+    // 5. ARC REACTOR INTERACTION
+    const arcReactor = document.querySelector('.arc-reactor');
+    if (arcReactor) {
+        arcReactor.addEventListener('click', () => {
+            // Create power surge effect
+            const powerLevel = document.querySelector('.power-level');
+            if (powerLevel) {
+                powerLevel.style.animation = 'none';
+                setTimeout(() => {
+                    powerLevel.style.animation = 'powerSurge 1s ease-out';
+                }, 10);
+            }
+        });
+    }
+
+    // 6. PARALLAX EFFECT FOR HUD CORNERS
+    document.addEventListener('mousemove', (e) => {
+        const hudCorners = document.querySelectorAll('.hud-corner');
+        const mouseX = e.clientX / window.innerWidth;
+        const mouseY = e.clientY / window.innerHeight;
+        
+        hudCorners.forEach((corner, index) => {
+            const speed = (index + 1) * 2;
+            const x = (mouseX - 0.5) * speed;
+            const y = (mouseY - 0.5) * speed;
+            corner.style.transform = `translate(${x}px, ${y}px)`;
+        });
+    });
+
+    // 7. GLITCH TEXT EFFECT
+    const glitchText = document.querySelector('.glitch-text');
+    if (glitchText) {
+        setInterval(() => {
+            glitchText.style.textShadow = `
+                ${Math.random() * 10 - 5}px ${Math.random() * 10 - 5}px 0 rgba(255, 42, 42, 0.7),
+                ${Math.random() * 10 - 5}px ${Math.random() * 10 - 5}px 0 rgba(0, 212, 255, 0.7)
+            `;
+            setTimeout(() => {
+                glitchText.style.textShadow = 'none';
+            }, 50);
+        }, 3000);
     }
 });
