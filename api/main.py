@@ -10,7 +10,7 @@ templates = Jinja2Templates(directory="templates")
 app.mount("/static", StaticFiles(directory="static"), name="static")
 
 def get_data():
-    with open("data/data.json", "r") as f:
+    with open("data.json", "r") as f:
         return json.load(f)
 
 @app.get("/", response_class=HTMLResponse)
