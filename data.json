@@ -4,7 +4,7 @@
     "label": "Backend Engineer",
     "cf_rank": "994",
     "cgpa": "8.3",
-    "problems_solved": "100+",
+    "problems_solved": "200+",
     "summary": "I am a Computer Science Engineering student at Dwarkadas J. Sanghvi College of Engineering. My core competency lies in building robust Backend Architectures and Data Science models.",
     "specialization": "FastAPI, Python, and SQL optimization",
     "linkedin": "linkedin.com/in/veer-Dodiya",
@@ -33,14 +33,22 @@
   ],
   "projects": [
     {
-      "name": "MONEY MANAGER",
-      "description": "Desktop finance application featuring a CustomTkinter GUI and a robust FastAPI backend.",
-      "tags": ["Python", "FastAPI", "MySQL"]
-    },
-    {
       "name": "X AND O (GAME)",
       "description": "GUI-based Tic-Tac-Toe game using KivyMD. Implemented clean OOP architecture.",
-      "tags": ["Python", "KivyMD", "OOP"]
+      "tags": ["Python", "KivyMD", "OOP"],
+      "github_url": "https://github.com/VEER1205/X-and-O"
+    },
+    {
+      "name": "MEDRED",
+      "description": "Healthcare management system with automated SMS/Call notifications.",
+      "tags": ["FastAPI", "MySQL", "Twilio"],
+      "github_url": "https://github.com/VEER1205/MedRed" 
+    },
+    {
+      "name": "MONEY MANAGER",
+      "description": "Desktop finance application with a FastAPI backend.",
+      "tags": ["Python", "FastAPI", "MySQL"],
+      "github_url": "https://github.com/VEER1205/Money-Management"
     }
   ]
 }
