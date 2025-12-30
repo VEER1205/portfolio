@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ data.basics.name }} | {{ data.basics.label }}</title>
+    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+
+    <div class="scan-line"></div>
+    <div class="background-grid"></div>
+
+    <div class="hud-corner top-left">SYS: ONLINE</div>
+    <div class="hud-corner top-right">CF RANK: {{ data.basics.cf_rank }}</div>
+    <div class="hud-corner bottom-left">MUMBAI, IN</div>
+    <div class="hud-corner bottom-right">VER: 2.0</div>
+
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="#" class="logo">{{ data.basics.name }}<span class="dot">.</span></a>
+            <div class="menu-toggle" id="mobile-menu">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </div>
+            <ul class="nav-links">
+                <li><a href="#hero">HOME</a></li>
+                <li><a href="#about">DATA</a></li>
+                <li><a href="#experience">LOGS</a></li>
+                <li><a href="#projects">PROJECTS</a></li>
+                <li><a href="#contact">CONTACT</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <section id="hero" class="hero-section">
+        <div class="hero-content">
+            <p class="overline">ARCHITECTING SCALABLE SOLUTIONS</p>
+            <h1 class="glitch-text" data-text="{{ data.basics.name }}">{{ data.basics.name }}</h1>
+            <div class="subtitle-container">
+                <span class="bracket">[</span>
+                <span id="typed-text"></span>
+                <span class="bracket">]</span>
+            </div>
+            
+            <div class="hero-stats">
+                <div class="stat-item">
+                    <span class="stat-val">{{ data.basics.cf_rank }}</span>
+                    <span class="stat-label">CODEFORCES</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-val">{{ data.basics.cgpa }}</span>
+                    <span class="stat-label">CGPA</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-val">{{ data.basics.problems_solved }}</span>
+                    <span class="stat-label">PROBLEMS SOLVED</span>
+                </div>
+            </div>
+
+            <div class="cta-group">
+                <a href="#projects" class="btn btn-primary">INITIATE PROJECTS</a>
+                <a href="#" id="download-resume" class="btn btn-outline">DOWNLOAD RESUME</a>
+            </div>
+        </div>
+    </section>
+
+    <section id="about" class="section">
+        <div class="container">
+            <h2 class="section-heading">OPERATIVE PROFILE</h2>
+            <div class="about-grid">
+                <div class="text-col fade-in">
+                    <p>{{ data.basics.summary }}</p>
+                    <p>
+                        Currently specializing in <strong>{{ data.basics.specialization }}</strong>. 
+                        I approach development with a competitive programming mindset, ensuring efficiency and scalability.
+                    </p>
+                </div>
+                <div class="skills-col fade-in">
+                    {% for skill in data.skills_bars %}
+                    <div class="skill-bar-container">
+                        <div class="skill-info">
+                            <span>{{ skill.name }}</span>
+                            <span>{{ skill.level }}%</span>
+                        </div>
+                        <div class="progress-bar"><div class="fill" style="width: {{ skill.level }}%"></div></div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="experience" class="section dark-alt">
+        <div class="container">
+            <h2 class="section-heading">MISSION LOGS</h2>
+            <div class="timeline">
+                
+                {% for log in data.experience %}
+                <div class="timeline-item fade-in">
+                    <div class="timeline-marker"></div>
+                    <div class="timeline-content">
+                        <div class="date-badge">{{ log.dates }}</div>
+                        <h3>{{ log.role }}</h3>
+                        <h4>{{ log.company }}</h4>
+                        <p>{{ log.description }}</p>
+                    </div>
+                </div>
+                {% endfor %}
+
+            </div>
+        </div>
+    </section>
+
+    <section id="projects" class="section">
+        <div class="container">
+            <h2 class="section-heading">SYSTEM MODULES</h2>
+            <div class="project-grid">
+                
+                {% for project in data.projects %}
+                <div class="tech-card fade-in">
+                    <div class="card-border"></div>
+                    <h3>{{ project.name }}</h3>
+                    <p class="desc">{{ project.description }}</p>
+                    <div class="tags">
+                        {% for tech in project.tags %}
+                        <span>{{ tech }}</span>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endfor %}
+
+            </div>
+        </div>
+    </section>
+
+    <footer id="contact">
+        <div class="footer-content">
+            <h3>{{ data.basics.name }}</h3>
+            <p class="footer-tag">END OF LINE.</p>
+            <div class="socials">
+                <a href="https://{{ data.basics.linkedin }}">LINKEDIN</a>
+                <a href="https://{{ data.basics.github }}">GITHUB</a>
+                <a href="mailto:{{ data.basics.email }}">EMAIL</a>
+            </div>
+            <p class="copyright">© 2025 {{ data.basics.name }}.</p>
+        </div>
+    </footer>
+
+    <script src="/static/index.js"></script>
+</body>
+</html>

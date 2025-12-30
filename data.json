@@ -1,0 +1,46 @@
+{
+  "basics": {
+    "name": "VEER DODIYA",
+    "label": "Backend Engineer",
+    "cf_rank": "994",
+    "cgpa": "8.3",
+    "problems_solved": "100+",
+    "summary": "I am a Computer Science Engineering student at Dwarkadas J. Sanghvi College of Engineering. My core competency lies in building robust Backend Architectures and Data Science models.",
+    "specialization": "FastAPI, Python, and SQL optimization",
+    "linkedin": "linkedin.com/in/veer-Dodiya",
+    "github": "github.com/VEER1205",
+    "email": "dodiyaveer12@gmail.com"
+  },
+  "skills_bars": [
+    { "name": "Python / Backend", "level": 95 },
+    { "name": "Data Structures (DSA)", "level": 90 },
+    { "name": "SQL / Database", "level": 85 },
+    { "name": "FastAPI / Node.js", "level": 80 }
+  ],
+  "experience": [
+    {
+      "dates": "SEPT 2025 - DEC 2025",
+      "role": "BACKEND DEVELOPER",
+      "company": "Google's Gen AI Hackathon (Team Futuro)",
+      "description": "Engineered backend infrastructure using FastAPI and integrated Google's Generative AI APIs."
+    },
+    {
+      "dates": "SEPT 2025",
+      "role": "BACKEND ARCHITECT",
+      "company": "Bit and Build Hackathon (Top 40 State Rank)",
+      "description": "Developed the complete backend for 'Paisa Buddy' using Express.js and Node.js."
+    }
+  ],
+  "projects": [
+    {
+      "name": "MONEY MANAGER",
+      "description": "Desktop finance application featuring a CustomTkinter GUI and a robust FastAPI backend.",
+      "tags": ["Python", "FastAPI", "MySQL"]
+    },
+    {
+      "name": "X AND O (GAME)",
+      "description": "GUI-based Tic-Tac-Toe game using KivyMD. Implemented clean OOP architecture.",
+      "tags": ["Python", "KivyMD", "OOP"]
+    }
+  ]
+}
