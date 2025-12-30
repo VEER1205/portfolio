@@ -3,295 +3,726 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VEER DODIYA | ADMIN_OS</title>
-    <script src="https://unpkg.com/lucide@latest"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <title>Admin Panel - Portfolio Manager</title>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        
         :root {
-            --primary: #ff2a2a;
-            --primary-glow: rgba(255, 42, 42, 0.4);
-            --bg-deep: #0a0a0a;
-            --bg-card: rgba(15, 15, 15, 0.9);
-            --border: rgba(255, 255, 255, 0.1);
-            --text-main: #ffffff;
-            --text-dim: #888888;
+            --bg-primary: #0a0a0a;
+            --bg-secondary: #151515;
+            --bg-tertiary: #1f1f1f;
+            --accent: #ff2a2a;
+            --accent-dim: rgba(255, 42, 42, 0.1);
+            --text-primary: #ffffff;
+            --text-secondary: #888888;
+            --border: #333333;
+            --success: #00ff88;
+            --warning: #ffaa00;
         }
-
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
         body {
-            font-family: 'Rajdhani', sans-serif;
-            background-color: var(--bg-deep);
-            color: var(--text-main);
-            overflow-x: hidden;
-            background-image: radial-gradient(circle at 2px 2px, rgba(255, 42, 42, 0.05) 1px, transparent 0);
-            background-size: 40px 40px;
+            font-family: 'Inter', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
         }
-
-        /* --- PORTFOLIO HUD ELEMENTS --- */
-        .scan-line {
-            width: 100%;
-            height: 100px;
-            z-index: 9999;
-            background: linear-gradient(0deg, rgba(0, 0, 0, 0) 0%, rgba(255, 42, 42, 0.05) 50%, rgba(0, 0, 0, 0) 100%);
-            opacity: 0.1;
-            position: fixed;
-            bottom: 100%;
-            pointer-events: none;
-            animation: scanline 8s linear infinite;
-        }
-
-        @keyframes scanline {
-            0% { bottom: 100%; }
-            100% { bottom: -100px; }
-        }
-
-        .hud-corner {
-            position: fixed;
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 10px;
-            color: var(--primary);
-            letter-spacing: 2px;
-            z-index: 1001;
-            padding: 20px;
-            text-transform: uppercase;
-        }
-        .top-left { top: 0; left: 0; border-left: 2px solid var(--primary); border-top: 2px solid var(--primary); }
-        .top-right { top: 0; right: 0; border-right: 2px solid var(--primary); border-top: 2px solid var(--primary); }
-        .bottom-left { bottom: 0; left: 0; border-left: 2px solid var(--primary); border-bottom: 2px solid var(--primary); }
-        .bottom-right { bottom: 0; right: 0; border-right: 2px solid var(--primary); border-bottom: 2px solid var(--primary); }
-
-        /* --- UPDATED NAVBAR --- */
-        .navbar {
-            background: rgba(10, 10, 10, 0.95);
-            backdrop-filter: blur(10px);
+        
+        .admin-header {
+            background: var(--bg-secondary);
             border-bottom: 1px solid var(--border);
-            padding: 1.2rem 2rem;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
             position: sticky;
             top: 0;
-            z-index: 1000;
+            z-index: 100;
         }
-
-        .nav-container {
-            max-width: 1400px;
-            margin: 0 auto;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .logo {
+        
+        .admin-title {
             font-size: 1.5rem;
             font-weight: 700;
-            color: white;
-            text-decoration: none;
-            letter-spacing: 3px;
+            color: var(--accent);
         }
-
-        .logo .dot { color: var(--primary); }
-
-        .nav-status {
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.7rem;
-            color: var(--text-dim);
+        
+        .admin-user {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        .actions-bar {
             display: flex;
-            align-items: center;
-            gap: 10px;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
         }
-
-        .status-dot {
-            width: 8px;
-            height: 8px;
-            background: var(--primary);
-            border-radius: 50%;
-            box-shadow: 0 0 10px var(--primary);
-            animation: blink 1.5s infinite;
-        }
-
-        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
-
-        /* --- ADMIN TABS AS NAV LINKS --- */
-        .admin-nav {
-            display: flex;
-            gap: 2rem;
-            margin-top: 20px;
-            justify-content: center;
-            border-bottom: 1px solid var(--border);
-            padding-bottom: 10px;
-        }
-
-        .tab {
-            background: none;
+        
+        .btn {
+            padding: 0.75rem 1.5rem;
             border: none;
-            color: var(--text-dim);
-            font-family: 'Rajdhani', sans-serif;
+            border-radius: 6px;
+            cursor: pointer;
             font-weight: 600;
             font-size: 0.9rem;
-            letter-spacing: 2px;
-            cursor: pointer;
-            transition: 0.3s;
-            position: relative;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-block;
         }
-
-        .tab.active { color: var(--primary); }
-        .tab.active::after {
-            content: '';
-            position: absolute;
-            bottom: -11px;
-            left: 0;
-            width: 100%;
-            height: 2px;
-            background: var(--primary);
-            box-shadow: 0 0 10px var(--primary);
+        
+        .btn-primary {
+            background: var(--accent);
+            color: white;
         }
-
-        /* --- CONTAINERS & CARDS --- */
-        .container {
-            max-width: 1100px;
-            margin: 40px auto;
-            padding: 0 20px;
+        
+        .btn-primary:hover {
+            background: #cc2222;
+            transform: translateY(-2px);
         }
-
-        .form-section {
-            background: var(--bg-card);
+        
+        .btn-secondary {
+            background: var(--bg-tertiary);
+            color: var(--text-primary);
             border: 1px solid var(--border);
-            padding: 3rem;
-            position: relative;
-            margin-bottom: 40px;
         }
-
-        .section-header {
+        
+        .btn-secondary:hover {
+            border-color: var(--accent);
+        }
+        
+        .btn-success {
+            background: var(--success);
+            color: black;
+        }
+        
+        .tabs {
+            display: flex;
+            gap: 0.5rem;
+            border-bottom: 1px solid var(--border);
+            margin-bottom: 2rem;
+        }
+        
+        .tab {
+            padding: 1rem 1.5rem;
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            cursor: pointer;
+            font-weight: 500;
+            border-bottom: 2px solid transparent;
+            transition: all 0.3s;
+        }
+        
+        .tab.active {
+            color: var(--accent);
+            border-bottom-color: var(--accent);
+        }
+        
+        .tab:hover {
+            color: var(--text-primary);
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.3s;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .form-section {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+        
+        .section-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            color: var(--accent);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--text-secondary);
+            font-weight: 500;
+            font-size: 0.9rem;
+        }
+        
+        .form-input,
+        .form-textarea,
+        .form-select {
+            width: 100%;
+            padding: 0.75rem;
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            color: var(--text-primary);
+            font-family: inherit;
+            font-size: 0.95rem;
+            transition: all 0.3s;
+        }
+        
+        .form-input:focus,
+        .form-textarea:focus,
+        .form-select:focus {
+            outline: none;
+            border-color: var(--accent);
+            background: var(--bg-primary);
+        }
+        
+        .form-textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+        
+        .array-item {
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            position: relative;
+        }
+        
+        .array-item-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 2rem;
-            border-bottom: 1px solid var(--primary);
-            padding-bottom: 10px;
+            margin-bottom: 1rem;
         }
-
-        .section-title {
-            font-size: 1.2rem;
-            letter-spacing: 4px;
-            color: var(--primary);
-            font-weight: 700;
-        }
-
-        /* --- BUTTONS (Portfolio Style) --- */
-        .btn {
-            padding: 10px 25px;
-            font-family: 'Rajdhani', sans-serif;
-            font-weight: 700;
-            letter-spacing: 2px;
+        
+        .btn-remove {
+            background: rgba(255, 42, 42, 0.2);
+            color: var(--accent);
+            padding: 0.5rem 1rem;
+            border: 1px solid var(--accent);
+            border-radius: 4px;
             cursor: pointer;
-            transition: 0.3s;
-            text-transform: uppercase;
-            font-size: 0.8rem;
+            font-size: 0.85rem;
         }
-
-        .btn-primary {
-            background: var(--primary);
-            color: white;
-            border: none;
-            box-shadow: 0 0 15px var(--primary-glow);
-        }
-
-        .btn-outline {
-            background: transparent;
-            border: 1px solid var(--primary);
-            color: var(--primary);
-        }
-
-        .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 0 20px var(--primary);
-            background: var(--primary);
+        
+        .btn-remove:hover {
+            background: var(--accent);
             color: white;
         }
-
-        /* Brackets around labels */
-        .bracket { color: var(--primary); font-weight: bold; }
-
-        input, textarea {
+        
+        .btn-add {
             width: 100%;
-            background: rgba(0,0,0,0.5);
-            border: 1px solid var(--border);
-            color: white;
-            padding: 12px;
-            font-family: 'Inter', sans-serif;
-            margin-top: 5px;
+            padding: 1rem;
+            background: var(--bg-tertiary);
+            border: 2px dashed var(--border);
+            border-radius: 6px;
+            color: var(--text-secondary);
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s;
         }
-
-        input:focus { border-color: var(--primary); outline: none; }
-
+        
+        .btn-add:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+        
+        .notification {
+            position: fixed;
+            top: 80px;
+            right: 2rem;
+            padding: 1rem 1.5rem;
+            border-radius: 6px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            display: none;
+            animation: slideIn 0.3s;
+        }
+        
+        @keyframes slideIn {
+            from { transform: translateX(400px); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        
+        .notification.success {
+            border-left: 4px solid var(--success);
+        }
+        
+        .notification.error {
+            border-left: 4px solid var(--accent);
+        }
+        
+        .backup-list {
+            display: grid;
+            gap: 1rem;
+        }
+        
+        .backup-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem;
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+        }
+        
+        .backup-info {
+            flex: 1;
+        }
+        
+        .backup-name {
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+        
+        .backup-meta {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            margin-top: 0.25rem;
+        }
+        
+        .tags-input-wrapper {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            padding: 0.75rem;
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            min-height: 45px;
+        }
+        
+        .tag-chip {
+            background: var(--accent-dim);
+            border: 1px solid var(--accent);
+            color: var(--accent);
+            padding: 0.25rem 0.75rem;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.85rem;
+        }
+        
+        .tag-remove {
+            cursor: pointer;
+            font-weight: bold;
+        }
+        
+        .tag-input {
+            border: none;
+            background: none;
+            color: var(--text-primary);
+            outline: none;
+            flex: 1;
+            min-width: 100px;
+        }
+        
+        .preview-frame {
+            width: 100%;
+            height: 80vh;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            background: white;
+        }
     </style>
 </head>
 <body>
-
-    <div class="scan-line"></div>
-
-    <div class="hud-corner top-left">SYS: ADMIN_OS</div>
-    <div class="hud-corner top-right">VER: 2.1</div>
-    <div class="hud-corner bottom-left">MUMBAI, IN</div>
-    <div class="hud-corner bottom-right">SECURE_LINK: ON</div>
-
-    <nav class="navbar">
-        <div class="nav-container">
-            <a href="#" class="logo">VEER DODIYA<span class="dot">.</span></a>
-            <div class="nav-status">
-                <div class="status-dot"></div>
-                AUTHENTICATED_SESSION // USER: {{ username }}
-            </div>
-            <div class="cta-group">
-                <button class="btn btn-primary" onclick="saveData()">[ DEPLOY_CHANGES ]</button>
-            </div>
-        </div>
-        
-        <div class="admin-nav">
-            <button class="tab active" onclick="switchTab('basics')">IDENTITY_DATA</button>
-            <button class="tab" onclick="switchTab('skills')">ABILITY_LOGS</button>
-            <button class="tab" onclick="switchTab('experience')">MISSION_LOGS</button>
-            <button class="tab" onclick="switchTab('projects')">SYSTEM_MODULES</button>
-            <button class="tab" onclick="switchTab('preview')">LIVE_OUTPUT</button>
-        </div>
-    </nav>
+    <div class="admin-header">
+        <div class="admin-title">⚡ PORTFOLIO ADMIN PANEL</div>
+        <div class="admin-user">Logged in as: <strong>{{ username }}</strong></div>
+    </div>
 
     <div class="container">
+        <div class="actions-bar">
+            <button class="btn btn-success" onclick="saveData()">💾 Save Changes</button>
+            <button class="btn btn-secondary" onclick="previewPortfolio()">👁️ Preview</button>
+            <button class="btn btn-secondary" onclick="loadBackups()">📦 Backups</button>
+            <a href="/" class="btn btn-secondary" target="_blank">🌐 View Live Site</a>
+        </div>
+
+        <div class="tabs">
+            <button class="tab active" onclick="switchTab('basics')">Basic Info</button>
+            <button class="tab" onclick="switchTab('skills')">Skills</button>
+            <button class="tab" onclick="switchTab('experience')">Experience</button>
+            <button class="tab" onclick="switchTab('projects')">Projects</button>
+            <button class="tab" onclick="switchTab('preview')">Live Preview</button>
+        </div>
+
+        <!-- BASICS TAB -->
         <div id="basics-tab" class="tab-content active">
             <div class="form-section">
-                <div class="section-header">
-                    <h2 class="section-title">CORE_IDENTITY</h2>
-                </div>
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                <h2 class="section-title">🎯 Basic Information</h2>
+                <div class="form-grid">
                     <div class="form-group">
-                        <label class="nav-status"><span class="bracket">[</span> NAME <span class="bracket">]</span></label>
-                        <input type="text" id="basics-name" value="{{ data.basics.name }}">
+                        <label class="form-label">Name</label>
+                        <input type="text" class="form-input" id="basics-name" value="{{ data.basics.name }}">
                     </div>
                     <div class="form-group">
-                        <label class="nav-status"><span class="bracket">[</span> DESIGNATION <span class="bracket">]</span></label>
-                        <input type="text" id="basics-label" value="{{ data.basics.label }}">
+                        <label class="form-label">Label/Title</label>
+                        <input type="text" class="form-input" id="basics-label" value="{{ data.basics.label }}">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">CodeForces Rank</label>
+                        <input type="text" class="form-input" id="basics-cf_rank" value="{{ data.basics.cf_rank }}">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">CGPA</label>
+                        <input type="text" class="form-input" id="basics-cgpa" value="{{ data.basics.cgpa }}">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Problems Solved</label>
+                        <input type="text" class="form-input" id="basics-problems_solved" value="{{ data.basics.problems_solved }}">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Specialization</label>
+                        <input type="text" class="form-input" id="basics-specialization" value="{{ data.basics.specialization }}">
                     </div>
                 </div>
-                <br>
                 <div class="form-group">
-                    <label class="nav-status"><span class="bracket">[</span> MISSION_SUMMARY <span class="bracket">]</span></label>
-                    <textarea id="basics-summary" rows="5">{{ data.basics.summary }}</textarea>
+                    <label class="form-label">Summary</label>
+                    <textarea class="form-textarea" id="basics-summary">{{ data.basics.summary }}</textarea>
+                </div>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label class="form-label">LinkedIn</label>
+                        <input type="text" class="form-input" id="basics-linkedin" value="{{ data.basics.linkedin }}">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">GitHub</label>
+                        <input type="text" class="form-input" id="basics-github" value="{{ data.basics.github }}">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Email</label>
+                        <input type="email" class="form-input" id="basics-email" value="{{ data.basics.email }}">
+                    </div>
                 </div>
             </div>
         </div>
 
+        <!-- SKILLS TAB -->
+        <div id="skills-tab" class="tab-content">
+            <div class="form-section">
+                <h2 class="section-title">💪 Skills</h2>
+                <div id="skills-container"></div>
+                <button class="btn-add" onclick="addSkill()">+ Add New Skill</button>
+            </div>
         </div>
 
+        <!-- EXPERIENCE TAB -->
+        <div id="experience-tab" class="tab-content">
+            <div class="form-section">
+                <h2 class="section-title">💼 Experience</h2>
+                <div id="experience-container"></div>
+                <button class="btn-add" onclick="addExperience()">+ Add New Experience</button>
+            </div>
+        </div>
+
+        <!-- PROJECTS TAB -->
+        <div id="projects-tab" class="tab-content">
+            <div class="form-section">
+                <h2 class="section-title">🚀 Projects</h2>
+                <div id="projects-container"></div>
+                <button class="btn-add" onclick="addProject()">+ Add New Project</button>
+            </div>
+        </div>
+
+        <!-- PREVIEW TAB -->
+        <div id="preview-tab" class="tab-content">
+            <div class="form-section">
+                <h2 class="section-title">👁️ Live Preview</h2>
+                <iframe id="preview-iframe" class="preview-frame" src="/admin/preview"></iframe>
+            </div>
+        </div>
+    </div>
+
+    <div id="notification" class="notification"></div>
+
     <script>
-        lucide.createIcons();
-        
+        let portfolioData = {{ data | tojson }};
+
         function switchTab(tabName) {
             document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
             document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            
             event.target.classList.add('active');
             document.getElementById(tabName + '-tab').classList.add('active');
+            
+            if (tabName === 'skills') renderSkills();
+            if (tabName === 'experience') renderExperience();
+            if (tabName === 'projects') renderProjects();
         }
 
-        // Add your existing saveData() and rendering logic here
+        function renderSkills() {
+            const container = document.getElementById('skills-container');
+            container.innerHTML = portfolioData.skills_bars.map((skill, index) => `
+                <div class="array-item">
+                    <div class="array-item-header">
+                        <h3>Skill #${index + 1}</h3>
+                        <button class="btn-remove" onclick="removeSkill(${index})">Remove</button>
+                    </div>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label class="form-label">Skill Name</label>
+                            <input type="text" class="form-input" value="${skill.name}" 
+                                   onchange="portfolioData.skills_bars[${index}].name = this.value">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Level (0-100)</label>
+                            <input type="number" class="form-input" value="${skill.level}" min="0" max="100"
+                                   onchange="portfolioData.skills_bars[${index}].level = parseInt(this.value)">
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function renderExperience() {
+            const container = document.getElementById('experience-container');
+            container.innerHTML = portfolioData.experience.map((exp, index) => `
+                <div class="array-item">
+                    <div class="array-item-header">
+                        <h3>Experience #${index + 1}</h3>
+                        <button class="btn-remove" onclick="removeExperience(${index})">Remove</button>
+                    </div>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label class="form-label">Dates</label>
+                            <input type="text" class="form-input" value="${exp.dates}"
+                                   onchange="portfolioData.experience[${index}].dates = this.value">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Role</label>
+                            <input type="text" class="form-input" value="${exp.role}"
+                                   onchange="portfolioData.experience[${index}].role = this.value">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Company</label>
+                        <input type="text" class="form-input" value="${exp.company}"
+                               onchange="portfolioData.experience[${index}].company = this.value">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Description</label>
+                        <textarea class="form-textarea" 
+                                  onchange="portfolioData.experience[${index}].description = this.value">${exp.description}</textarea>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function renderProjects() {
+            const container = document.getElementById('projects-container');
+            container.innerHTML = portfolioData.projects.map((project, index) => `
+                <div class="array-item">
+                    <div class="array-item-header">
+                        <h3>Project #${index + 1}</h3>
+                        <button class="btn-remove" onclick="removeProject(${index})">Remove</button>
+                    </div>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label class="form-label">Project Name</label>
+                            <input type="text" class="form-input" value="${project.name}"
+                                   onchange="portfolioData.projects[${index}].name = this.value">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">GitHub URL</label>
+                            <input type="url" class="form-input" value="${project.github_url}"
+                                   onchange="portfolioData.projects[${index}].github_url = this.value">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Description</label>
+                        <textarea class="form-textarea"
+                                  onchange="portfolioData.projects[${index}].description = this.value">${project.description}</textarea>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Tags (comma-separated)</label>
+                        <input type="text" class="form-input" value="${project.tags.join(', ')}"
+                               onchange="portfolioData.projects[${index}].tags = this.value.split(',').map(t => t.trim())">
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function addSkill() {
+            portfolioData.skills_bars.push({ name: "New Skill", level: 50 });
+            renderSkills();
+        }
+
+        function removeSkill(index) {
+            if (confirm('Remove this skill?')) {
+                portfolioData.skills_bars.splice(index, 1);
+                renderSkills();
+            }
+        }
+
+        function addExperience() {
+            portfolioData.experience.push({
+                dates: "MONTH YEAR - MONTH YEAR",
+                role: "New Role",
+                company: "Company Name",
+                description: "Description of your role and achievements."
+            });
+            renderExperience();
+        }
+
+        function removeExperience(index) {
+            if (confirm('Remove this experience?')) {
+                portfolioData.experience.splice(index, 1);
+                renderExperience();
+            }
+        }
+
+        function addProject() {
+            portfolioData.projects.push({
+                name: "New Project",
+                description: "Project description",
+                tags: ["Tag1", "Tag2"],
+                github_url: "https://github.com/username/repo"
+            });
+            renderProjects();
+        }
+
+        function removeProject(index) {
+            if (confirm('Remove this project?')) {
+                portfolioData.projects.splice(index, 1);
+                renderProjects();
+            }
+        }
+
+        function collectBasicsData() {
+            portfolioData.basics.name = document.getElementById('basics-name').value;
+            portfolioData.basics.label = document.getElementById('basics-label').value;
+            portfolioData.basics.cf_rank = document.getElementById('basics-cf_rank').value;
+            portfolioData.basics.cgpa = document.getElementById('basics-cgpa').value;
+            portfolioData.basics.problems_solved = document.getElementById('basics-problems_solved').value;
+            portfolioData.basics.summary = document.getElementById('basics-summary').value;
+            portfolioData.basics.specialization = document.getElementById('basics-specialization').value;
+            portfolioData.basics.linkedin = document.getElementById('basics-linkedin').value;
+            portfolioData.basics.github = document.getElementById('basics-github').value;
+            portfolioData.basics.email = document.getElementById('basics-email').value;
+        }
+
+        async function saveData() {
+            collectBasicsData();
+            
+            try {
+                const response = await fetch('/api/data', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(portfolioData)
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    showNotification('✅ Data saved successfully!', 'success');
+                    document.getElementById('preview-iframe').src = '/admin/preview?' + new Date().getTime();
+                } else {
+                    showNotification('❌ Error saving data', 'error');
+                }
+            } catch (error) {
+                showNotification('❌ ' + error.message, 'error');
+            }
+        }
+
+        function previewPortfolio() {
+            switchTab('preview');
+            document.querySelector('[onclick="switchTab(\'preview\')"]').click();
+        }
+
+        async function loadBackups() {
+            try {
+                const response = await fetch('/api/backups');
+                const data = await response.json();
+                
+                if (data.backups.length === 0) {
+                    alert('No backups available');
+                    return;
+                }
+                
+                const backupList = data.backups.map(b => 
+                    `${b.filename} (${new Date(b.modified).toLocaleString()})`
+                ).join('\n');
+                
+                const selected = prompt('Available backups:\n\n' + backupList + '\n\nEnter filename to restore:');
+                
+                if (selected) {
+                    await restoreBackup(selected.trim());
+                }
+            } catch (error) {
+                showNotification('❌ ' + error.message, 'error');
+            }
+        }
+
+        async function restoreBackup(filename) {
+            if (!confirm(`Restore from ${filename}? Current data will be backed up first.`)) return;
+            
+            try {
+                const response = await fetch(`/api/restore/${filename}`, { method: 'POST' });
+                const result = await response.json();
+                
+                if (result.success) {
+                    showNotification('✅ ' + result.message, 'success');
+                    setTimeout(() => location.reload(), 1500);
+                } else {
+                    showNotification('❌ Error restoring backup', 'error');
+                }
+            } catch (error) {
+                showNotification('❌ ' + error.message, 'error');
+            }
+        }
+
+        function showNotification(message, type) {
+            const notification = document.getElementById('notification');
+            notification.textContent = message;
+            notification.className = 'notification ' + type;
+            notification.style.display = 'block';
+            
+            setTimeout(() => {
+                notification.style.display = 'none';
+            }, 3000);
+        }
+
+        // Initialize
+        renderSkills();
+        renderExperience();
+        renderProjects();
     </script>
 </body>
 </html>
