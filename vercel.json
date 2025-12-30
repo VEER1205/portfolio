@@ -13,6 +13,10 @@
     {
       "source": "/(.*)",
       "destination": "api/main.py"
+    },
+    {
+        "source": "/templates/admin.html",
+        "destination": "/api/admin"
     }
   ]
 }
