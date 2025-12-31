@@ -85,7 +85,7 @@ async def update_portfolio_data(
         save_data(data)
         return {"success": True, "message": "Data updated successfully"}
     except Exception as e:
-        raise HTTPException(status_code=400, detail=str(e))
+        raise HTTPException(status_code=400, detail=str(e)+" --- "+str(data))
 
 @app.get("/api/backups")
 async def list_backups(username: str = Depends(verify_admin)):
