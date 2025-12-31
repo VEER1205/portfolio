@@ -1,1148 +1,174 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ADMIN:PANEL - PORTFOLIO CONTROL SYSTEM</title>
-    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        :root {
-            --terminal-black: #0a0e14;
-            --terminal-dark: #0f1419;
-            --terminal-darker: #060a0f;
-            --terminal-card: #151b24;
-            --neon-red: #ff0040;
-            --neon-red-glow: rgba(255, 0, 64, 0.5);
-            --neon-dim: #cc0033;
-            --text-bright: #e8f0e8;
-            --text-muted: #8d6b7f;
-            --text-dark: #61494a;
-            --border-dim: #2d1a26;
-            --danger: #ff3366;
-            --warning: #ffaa00;
-            --scan-line: rgba(255, 0, 64, 0.15);
-        }
-
-        @keyframes scanline-horizontal {
-            0% { 
-                transform: translateY(-100%);
-                opacity: 0;
-            }
-            10% {
-                opacity: 1;
-            }
-            90% {
-                opacity: 1;
-            }
-            100% { 
-                transform: translateY(100vh);
-                opacity: 0;
-            }
-        }
-
-        @keyframes glitch {
-            0%, 100% { transform: translate(0); }
-            33% { transform: translate(-2px, 2px); }
-            66% { transform: translate(2px, -2px); }
-        }
-
-        @keyframes pulse-glow {
-            0%, 100% { box-shadow: 0 0 10px var(--neon-red-glow); }
-            50% { box-shadow: 0 0 25px var(--neon-red-glow); }
-        }
-
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        @keyframes terminal-boot {
-            from {
-                opacity: 0;
-                transform: scale(0.95);
-            }
-            to {
-                opacity: 1;
-                transform: scale(1);
-            }
-        }
-
-        body {
-            font-family: 'JetBrains Mono', 'Space Mono', monospace;
-            background: var(--terminal-black);
-            color: var(--text-bright);
-            line-height: 1.6;
-            min-height: 100vh;
-            position: relative;
-            overflow-x: hidden;
-        }
-
-        /* Horizontal Scanning Ray Effect */
-        body::before {
-            content: '';
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 20px;
-            background: linear-gradient(
-                to bottom,
-                transparent 0%,
-                var(--scan-line) 30%,
-                var(--neon-red) 50%,
-                var(--scan-line) 70%,
-                transparent 100%
-            );
-            animation: scanline-horizontal 6s ease-in-out infinite;
-            pointer-events: none;
-            z-index: 9999;
-            box-shadow: 
-                0 0 20px var(--neon-red-glow),
-                0 0 40px var(--neon-red-glow);
-            filter: blur(1px);
-        }
-
-        /* Grid background pattern */
-        body::after {
-            content: '';
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-image: 
-                linear-gradient(var(--border-dim) 1px, transparent 1px),
-                linear-gradient(90deg, var(--border-dim) 1px, transparent 1px);
-            background-size: 50px 50px;
-            opacity: 0.3;
-            pointer-events: none;
-            z-index: 0;
-        }
-
-        .container {
-            max-width: 1600px;
-            margin: 0 auto;
-            padding: 40px 30px;
-            position: relative;
-            z-index: 1;
-            animation: terminal-boot 0.6s ease-out;
-        }
-
-        /* Terminal Header */
-        .terminal-header {
-            background: var(--terminal-card);
-            border: 2px solid var(--neon-red);
-            padding: 20px 30px;
-            margin-bottom: 40px;
-            position: relative;
-            overflow: hidden;
-            box-shadow: 0 0 30px rgba(255, 0, 64, 0.2);
-        }
-
-        .terminal-header::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(45deg, transparent 30%, var(--neon-red-glow) 50%, transparent 70%);
-            transform: translateX(-100%);
-            transition: transform 0.8s;
-        }
-
-        .terminal-header:hover::before {
-            transform: translateX(100%);
-        }
-
-        .header-content {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 20px;
-            position: relative;
-            z-index: 1;
-        }
-
-        .terminal-title {
-            font-size: clamp(24px, 4vw, 42px);
-            font-weight: 800;
-            color: var(--neon-red);
-            text-transform: uppercase;
-            letter-spacing: 4px;
-            text-shadow: 0 0 20px var(--neon-red-glow);
-            font-family: 'Space Mono', monospace;
-        }
-
-        .system-status {
-            display: flex;
-            gap: 20px;
-            align-items: center;
-            flex-wrap: wrap;
-        }
-
-        .status-indicator {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            font-size: 12px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .status-dot {
-            width: 10px;
-            height: 10px;
-            background: var(--neon-red);
-            border-radius: 50%;
-            animation: pulse-glow 2s infinite;
-        }
-
-        /* Action Bar */
-        .actions-bar {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 15px;
-            margin-bottom: 40px;
-            animation: fadeInUp 0.6s ease-out 0.1s both;
-        }
-
-        .btn {
-            padding: 16px 24px;
-            background: transparent;
-            border: 2px solid var(--neon-red);
-            color: var(--neon-red);
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 13px;
-            font-weight: 700;
-            cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            text-decoration: none;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .btn::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: var(--neon-red);
-            transition: left 0.3s;
-            z-index: -1;
-        }
-
-        .btn:hover::before {
-            left: 0;
-        }
-
-        .btn:hover {
-            color: var(--terminal-black);
-            box-shadow: 0 0 30px var(--neon-red-glow);
-            transform: translateY(-2px);
-        }
-
-        .btn:active {
-            transform: translateY(0);
-        }
-
-        .btn-secondary {
-            border-color: var(--text-muted);
-            color: var(--text-muted);
-        }
-
-        .btn-secondary::before {
-            background: var(--text-muted);
-        }
-
-        .btn-secondary:hover {
-            box-shadow: 0 0 20px rgba(141, 107, 127, 0.3);
-        }
-
-        /* Navigation Tabs */
-        .nav-system {
-            margin-bottom: 40px;
-            animation: fadeInUp 0.6s ease-out 0.2s both;
-        }
-
-        .tabs-container {
-            display: flex;
-            gap: 5px;
-            border-bottom: 2px solid var(--border-dim);
-            overflow-x: auto;
-            scrollbar-width: thin;
-            scrollbar-color: var(--neon-red) var(--terminal-dark);
-        }
-
-        .tabs-container::-webkit-scrollbar {
-            height: 6px;
-        }
-
-        .tabs-container::-webkit-scrollbar-track {
-            background: var(--terminal-dark);
-        }
-
-        .tabs-container::-webkit-scrollbar-thumb {
-            background: var(--neon-red);
-            border-radius: 3px;
-        }
-
-        .tab {
-            padding: 18px 32px;
-            background: transparent;
-            border: none;
-            color: var(--text-muted);
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 13px;
-            font-weight: 700;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            white-space: nowrap;
-            position: relative;
-            border-bottom: 3px solid transparent;
-        }
-
-        .tab::before {
-            content: '[ ';
-            opacity: 0;
-            transition: opacity 0.3s;
-        }
-
-        .tab::after {
-            content: ' ]';
-            opacity: 0;
-            transition: opacity 0.3s;
-        }
-
-        .tab:hover {
-            color: var(--neon-red);
-            background: rgba(255, 0, 64, 0.05);
-        }
-
-        .tab:hover::before,
-        .tab:hover::after {
-            opacity: 1;
-        }
-
-        .tab.active {
-            color: var(--neon-red);
-            border-bottom-color: var(--neon-red);
-            text-shadow: 0 0 10px var(--neon-red-glow);
-        }
-
-        .tab.active::before,
-        .tab.active::after {
-            opacity: 1;
-        }
-
-        /* Tab Content */
-        .tab-content {
-            display: none;
-            animation: fadeInUp 0.4s ease-out;
-        }
-
-        .tab-content.active {
-            display: block;
-        }
-
-        /* Form Sections */
-        .form-section {
-            background: var(--terminal-card);
-            padding: 40px;
-            border: 1px solid var(--border-dim);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .form-section::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 4px;
-            height: 100%;
-            background: var(--neon-red);
-            box-shadow: 0 0 10px var(--neon-red-glow);
-        }
-
-        .section-title {
-            color: var(--neon-red);
-            font-size: 28px;
-            font-weight: 800;
-            margin-bottom: 30px;
-            padding-bottom: 20px;
-            border-bottom: 2px solid var(--border-dim);
-            text-transform: uppercase;
-            letter-spacing: 3px;
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-
-        .section-title::before {
-            content: '>';
-            font-size: 36px;
-            animation: pulse-glow 2s infinite;
-        }
-
-        /* Form Grid */
-        .form-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 25px;
-            margin-bottom: 25px;
-        }
-
-        .form-group {
-            margin-bottom: 25px;
-        }
-
-        .form-label {
-            display: block;
-            margin-bottom: 10px;
-            color: var(--neon-red);
-            font-weight: 700;
-            text-transform: uppercase;
-            font-size: 11px;
-            letter-spacing: 2px;
-            position: relative;
-            padding-left: 15px;
-        }
-
-        .form-label::before {
-            content: '▸';
-            position: absolute;
-            left: 0;
-            color: var(--neon-red);
-        }
-
-        .form-input,
-        .form-textarea {
-            width: 100%;
-            padding: 14px 18px;
-            background: var(--terminal-dark);
-            border: 1px solid var(--border-dim);
-            color: var(--text-bright);
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 13px;
-            transition: all 0.3s ease;
-        }
-
-        .form-input:focus,
-        .form-textarea:focus {
-            outline: none;
-            border-color: var(--neon-red);
-            box-shadow: 0 0 15px rgba(255, 0, 64, 0.2), inset 0 0 10px rgba(255, 0, 64, 0.05);
-            background: var(--terminal-darker);
-        }
-
-        .form-textarea {
-            min-height: 140px;
-            resize: vertical;
-            line-height: 1.8;
-        }
-
-        /* Array Items */
-        .array-item {
-            background: var(--terminal-dark);
-            padding: 30px;
-            margin-bottom: 25px;
-            border: 1px solid var(--border-dim);
-            position: relative;
-            transition: all 0.3s ease;
-        }
-
-        .array-item:hover {
-            border-color: var(--neon-red);
-            box-shadow: 0 0 20px rgba(255, 0, 64, 0.1);
-        }
-
-        .array-item::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 3px;
-            background: linear-gradient(90deg, var(--neon-red), transparent);
-        }
-
-        .array-item-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 25px;
-            padding-bottom: 20px;
-            border-bottom: 1px solid var(--border-dim);
-        }
-
-        .array-item-header h3 {
-            color: var(--neon-red);
-            font-size: 16px;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            font-weight: 700;
-        }
-
-        .array-item-header h3::before {
-            content: '[ ';
-            color: var(--text-muted);
-        }
-
-        .array-item-header h3::after {
-            content: ' ]';
-            color: var(--text-muted);
-        }
-
-        .btn-remove {
-            padding: 10px 20px;
-            background: transparent;
-            border: 1px solid var(--danger);
-            color: var(--danger);
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 11px;
-            font-weight: 700;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .btn-remove:hover {
-            background: var(--danger);
-            color: var(--terminal-black);
-            box-shadow: 0 0 20px rgba(255, 51, 102, 0.4);
-        }
-
-        .btn-add {
-            width: 100%;
-            padding: 20px;
-            background: transparent;
-            border: 2px dashed var(--neon-red);
-            color: var(--neon-red);
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 14px;
-            font-weight: 700;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            position: relative;
-        }
-
-        .btn-add::before {
-            content: '+';
-            font-size: 24px;
-            margin-right: 10px;
-        }
-
-        .btn-add:hover {
-            background: rgba(255, 0, 64, 0.1);
-            border-style: solid;
-            box-shadow: 0 0 25px rgba(255, 0, 64, 0.2);
-        }
-
-        /* Preview Frame */
-        .preview-frame {
-            width: 100%;
-            height: 85vh;
-            border: 2px solid var(--neon-red);
-            background: white;
-            box-shadow: 0 0 40px rgba(255, 0, 64, 0.2);
-        }
-
-        /* Notification */
-        .notification {
-            position: fixed;
-            top: 30px;
-            right: 30px;
-            padding: 20px 30px;
-            background: var(--terminal-card);
-            border: 2px solid var(--neon-red);
-            color: var(--text-bright);
-            font-family: 'JetBrains Mono', monospace;
-            font-weight: 700;
-            font-size: 13px;
-            display: none;
-            z-index: 10000;
-            letter-spacing: 1px;
-            box-shadow: 0 0 30px rgba(255, 0, 64, 0.4);
-            animation: fadeInUp 0.3s ease-out;
-            max-width: 400px;
-        }
-
-        .notification.success {
-            border-color: var(--neon-red);
-            color: var(--neon-red);
-        }
-
-        .notification.error {
-            border-color: var(--danger);
-            color: var(--danger);
-            box-shadow: 0 0 30px rgba(255, 51, 102, 0.4);
-        }
-
-        .notification::before {
-            content: '[ ';
-        }
-
-        .notification::after {
-            content: ' ]';
-        }
-
-        /* Scrollbar */
-        ::-webkit-scrollbar {
-            width: 12px;
-            height: 12px;
-        }
-
-        ::-webkit-scrollbar-track {
-            background: var(--terminal-dark);
-        }
-
-        ::-webkit-scrollbar-thumb {
-            background: var(--neon-red);
-            border: 2px solid var(--terminal-dark);
-        }
-
-        ::-webkit-scrollbar-thumb:hover {
-            background: var(--neon-dim);
-        }
-
-        /* Loading Indicator */
-        .loading-bar {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 3px;
-            background: var(--neon-red);
-            transform: scaleX(0);
-            transform-origin: left;
-            transition: transform 0.3s ease;
-            z-index: 10001;
-            box-shadow: 0 0 10px var(--neon-red-glow);
-        }
-
-        .loading-bar.active {
-            animation: loading 1.5s ease-in-out infinite;
-        }
-
-        @keyframes loading {
-            0% { transform: scaleX(0); }
-            50% { transform: scaleX(0.7); }
-            100% { transform: scaleX(1); }
-        }
-
-        /* Responsive */
-        @media (max-width: 768px) {
-            .container {
-                padding: 20px 15px;
-            }
-
-            .terminal-header {
-                padding: 20px;
-            }
-
-            .terminal-title {
-                font-size: 20px;
-                letter-spacing: 2px;
-            }
-
-            .form-section {
-                padding: 25px 20px;
-            }
-
-            .form-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .actions-bar {
-                grid-template-columns: 1fr;
-            }
-
-            .tabs-container {
-                gap: 3px;
-            }
-
-            .tab {
-                padding: 15px 20px;
-                font-size: 11px;
-            }
-
-            .array-item {
-                padding: 20px;
-            }
-
-            .section-title {
-                font-size: 20px;
-            }
-        }
-
-        /* Terminal cursor effect */
-        @keyframes blink {
-            0%, 50% { opacity: 1; }
-            51%, 100% { opacity: 0; }
-        }
-
-        .cursor-blink::after {
-            content: '█';
-            animation: blink 1s infinite;
-            color: var(--neon-red);
-        }
-    </style>
-</head>
-<body>
-
-<div class="loading-bar"></div>
-
-<div class="container">
-    <!-- Terminal Header -->
-    <div class="terminal-header">
-        <div class="header-content">
-            <h1 class="terminal-title">ADMIN:CONTROL</h1>
-            <div class="system-status">
-                <div class="status-indicator">
-                    <span class="status-dot"></span>
-                    <span>SYS:ONLINE</span>
-                </div>
-                <div class="status-indicator">
-                    <span>VER:2.0</span>
-                </div>
-            </div>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{{ data.basics.name }} | {{ data.basics.label }}</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Roboto:wght@300;400;500&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/static/style.css" />
+  </head>
+  <body>
+    <div class="scan-line"></div>
+    <div class="background-grid"></div>
+
+    <div class="hud-corner top-left">SYS: ONLINE</div>
+    <div class="hud-corner top-right">CF RANK: {{ data.basics.cf_rank }}</div>
+    <div class="hud-corner bottom-left">MUMBAI, IN</div>
+    <div class="hud-corner bottom-right">VER: 2.0</div>
+
+    <nav class="navbar">
+      <div class="nav-container">
+        <a href="#" class="logo"
+          >{{ data.basics.name }}<span class="dot">.</span></a
+        >
+        <div class="menu-toggle" id="mobile-menu">
+          <span class="bar"></span>
+          <span class="bar"></span>
+          <span class="bar"></span>
         </div>
-    </div>
+        <ul class="nav-links">
+          <li><a href="#hero">HOME</a></li>
+          <li><a href="#about">DATA</a></li>
+          <li><a href="#experience">LOGS</a></li>
+          <li><a href="#projects">PROJECTS</a></li>
+          <li><a href="#contact">CONTACT</a></li>
+        </ul>
+      </div>
+    </nav>
 
-    <!-- Action Bar -->
-    <div class="actions-bar">
-        <button class="btn btn-success" onclick="saveData()">💾 SAVE CHANGES</button>
-        <button class="btn btn-secondary" onclick="previewPortfolio()">👁️ PREVIEW</button>
-        <button class="btn btn-secondary" onclick="loadBackups()">📦 BACKUPS</button>
-        <a href="/" class="btn btn-secondary" target="_blank">🌐 LIVE SITE</a>
-    </div>
-
-    <!-- Navigation System -->
-    <div class="nav-system">
-        <div class="tabs-container">
-            <button class="tab active" onclick="switchTab('basics')">BASIC INFO</button>
-            <button class="tab" onclick="switchTab('skills')">SKILLS</button>
-            <button class="tab" onclick="switchTab('experience')">EXPERIENCE</button>
-            <button class="tab" onclick="switchTab('projects')">PROJECTS</button>
-            <button class="tab" onclick="switchTab('preview')">LIVE PREVIEW</button>
+    <section id="hero" class="hero-section">
+      <div class="hero-content">
+        <p class="overline">ARCHITECTING SCALABLE SOLUTIONS</p>
+        <h1 class="glitch-text" data-text="{{ data.basics.name }}">
+          {{ data.basics.name }}
+        </h1>
+        <div class="subtitle-container">
+          <span class="bracket">[</span>
+          <span id="typed-text"></span>
+          <span class="bracket">]</span>
         </div>
-    </div>
 
-    <!-- BASICS TAB -->
-    <div id="basics-tab" class="tab-content active">
-        <div class="form-section">
-            <h2 class="section-title">BASIC INFORMATION</h2>
-            <div class="form-grid">
-                <div class="form-group">
-                    <label class="form-label">Name</label>
-                    <input type="text" class="form-input" id="basics-name" value="{{ data.basics.name }}" placeholder="Enter full name">
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Label/Title</label>
-                    <input type="text" class="form-input" id="basics-label" value="{{ data.basics.label }}" placeholder="e.g., Backend Engineer">
-                </div>
-                <div class="form-group">
-                    <label class="form-label">CodeForces Rank</label>
-                    <input type="text" class="form-input" id="basics-cf_rank" value="{{ data.basics.cf_rank }}" placeholder="e.g., 994">
-                </div>
-                <div class="form-group">
-                    <label class="form-label">CGPA</label>
-                    <input type="text" class="form-input" id="basics-cgpa" value="{{ data.basics.cgpa }}" placeholder="e.g., 8.3">
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Problems Solved</label>
-                    <input type="text" class="form-input" id="basics-problems_solved" value="{{ data.basics.problems_solved }}" placeholder="e.g., 200+">
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Specialization</label>
-                    <input type="text" class="form-input" id="basics-specialization" value="{{ data.basics.specialization }}" placeholder="e.g., FastAPI, Python">
-                </div>
-            </div>
-            <div class="form-group">
-                <label class="form-label">Summary</label>
-                <textarea class="form-input form-textarea" id="basics-summary" placeholder="Enter professional summary">{{ data.basics.summary }}</textarea>
-            </div>
-            <div class="form-grid">
-                <div class="form-group">
-                    <label class="form-label">LinkedIn</label>
-                    <input type="text" class="form-input" id="basics-linkedin" value="{{ data.basics.linkedin }}" placeholder="LinkedIn profile URL">
-                </div>
-                <div class="form-group">
-                    <label class="form-label">GitHub</label>
-                    <input type="text" class="form-input" id="basics-github" value="{{ data.basics.github }}" placeholder="GitHub profile URL">
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Email</label>
-                    <input type="email" class="form-input" id="basics-email" value="{{ data.basics.email }}" placeholder="email@example.com">
-                </div>
-            </div>
+        <div class="hero-stats">
+          <div class="stat-item">
+            <span class="stat-val">{{ data.basics.cf_rank }}</span>
+            <span class="stat-label">CODEFORCES</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-val">{{ data.basics.cgpa }}</span>
+            <span class="stat-label">CGPA</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-val">{{ data.basics.problems_solved }}</span>
+            <span class="stat-label">PROBLEMS SOLVED</span>
+          </div>
         </div>
-    </div>
 
-    <!-- SKILLS TAB -->
-    <div id="skills-tab" class="tab-content">
-        <div class="form-section">
-            <h2 class="section-title">SKILLS DATABASE</h2>
-            <div id="skills-container"></div>
-            <button class="btn-add" onclick="addSkill()">ADD NEW SKILL</button>
+        <div class="cta-group">
+          <a href="#projects" class="btn btn-primary">INITIATE PROJECTS</a>
+          <a href="#" id="download-resume" class="btn btn-outline"
+            >DOWNLOAD RESUME</a
+          >
         </div>
-    </div>
+      </div>
+    </section>
 
-    <!-- EXPERIENCE TAB -->
-    <div id="experience-tab" class="tab-content">
-        <div class="form-section">
-            <h2 class="section-title">MISSION LOGS</h2>
-            <div id="experience-container"></div>
-            <button class="btn-add" onclick="addExperience()">ADD NEW EXPERIENCE</button>
-        </div>
-    </div>
-
-    <!-- PROJECTS TAB -->
-    <div id="projects-tab" class="tab-content">
-        <div class="form-section">
-            <h2 class="section-title">SYSTEM MODULES</h2>
-            <div id="projects-container"></div>
-            <button class="btn-add" onclick="addProject()">ADD NEW PROJECT</button>
-        </div>
-    </div>
-
-    <!-- PREVIEW TAB -->
-    <div id="preview-tab" class="tab-content">
-        <div class="form-section">
-            <h2 class="section-title">LIVE PREVIEW</h2>
-            <iframe id="preview-iframe" class="preview-frame" src="/admin/preview"></iframe>
-        </div>
-    </div>
-</div>
-
-<div id="notification" class="notification"></div>
-
-<script>
-    let portfolioData = {{ data | tojson }};
-
-    function switchTab(tabName) {
-        // Show loading bar
-        const loadingBar = document.querySelector('.loading-bar');
-        loadingBar.classList.add('active');
-
-        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-        document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-        
-        event.target.classList.add('active');
-        document.getElementById(tabName + '-tab').classList.add('active');
-        
-        if (tabName === 'skills') renderSkills();
-        if (tabName === 'experience') renderExperience();
-        if (tabName === 'projects') renderProjects();
-
-        // Hide loading bar
-        setTimeout(() => loadingBar.classList.remove('active'), 300);
-    }
-
-    function renderSkills() {
-        const container = document.getElementById('skills-container');
-        container.innerHTML = portfolioData.skills_bars.map((skill, index) => `
-            <div class="array-item">
-                <div class="array-item-header">
-                    <h3>SKILL #${String(index + 1).padStart(2, '0')}</h3>
-                    <button class="btn-remove" onclick="removeSkill(${index})">DELETE</button>
-                </div>
-                <div class="form-grid">
-                    <div class="form-group">
-                        <label class="form-label">Skill Name</label>
-                        <input type="text" class="form-input" value="${skill.name}" 
-                               onchange="portfolioData.skills_bars[${index}].name = this.value"
-                               placeholder="e.g., Python / Backend">
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label">Level (0-100)</label>
-                        <input type="number" class="form-input" value="${skill.level}" min="0" max="100"
-                               onchange="portfolioData.skills_bars[${index}].level = parseInt(this.value)"
-                               placeholder="95">
-                    </div>
-                </div>
+    <section id="about" class="section">
+      <div class="container">
+        <h2 class="section-heading">OPERATIVE PROFILE</h2>
+        <div class="about-grid">
+          <div class="text-col fade-in">
+            <p>{{ data.basics.summary }}</p>
+            <p>
+              Currently specializing in
+              <strong>{{ data.basics.specialization }}</strong>. I approach
+              development with a competitive programming mindset, ensuring
+              efficiency and scalability.
+            </p>
+          </div>
+          <div class="skills-col fade-in">
+            {% for skill in data.skills_bars %}
+            <div class="skill-bar-container">
+              <div class="skill-info">
+                <span>{{ skill.name }}</span>
+                <span>{{ skill.level }}%</span>
+              </div>
+              <div class="progress-bar">
+                <div class="fill" style="width: {{ skill.level }}%"></div>
+              </div>
             </div>
-        `).join('');
-    }
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+    </section>
 
-    function renderExperience() {
-        const container = document.getElementById('experience-container');
-        container.innerHTML = portfolioData.experience.map((exp, index) => `
-            <div class="array-item">
-                <div class="array-item-header">
-                    <h3>EXPERIENCE #${String(index + 1).padStart(2, '0')}</h3>
-                    <button class="btn-remove" onclick="removeExperience(${index})">DELETE</button>
-                </div>
-                <div class="form-grid">
-                    <div class="form-group">
-                        <label class="form-label">Dates</label>
-                        <input type="text" class="form-input" value="${exp.dates}"
-                               onchange="portfolioData.experience[${index}].dates = this.value"
-                               placeholder="SEPT 2025 - DEC 2025">
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label">Role</label>
-                        <input type="text" class="form-input" value="${exp.role}"
-                               onchange="portfolioData.experience[${index}].role = this.value"
-                               placeholder="BACKEND DEVELOPER">
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Company</label>
-                    <input type="text" class="form-input" value="${exp.company}"
-                           onchange="portfolioData.experience[${index}].company = this.value"
-                           placeholder="Company Name">
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Description</label>
-                    <textarea class="form-input form-textarea" 
-                              onchange="portfolioData.experience[${index}].description = this.value"
-                              placeholder="Description of role and achievements">${exp.description}</textarea>
-                </div>
+    <section id="experience" class="section dark-alt">
+      <div class="container">
+        <h2 class="section-heading">MISSION LOGS</h2>
+        <div class="timeline">
+          {% for log in data.experience %}
+          <div class="timeline-item fade-in">
+            <div class="timeline-marker"></div>
+            <div class="timeline-content">
+              <div class="date-badge">{{ log.dates }}</div>
+              <h3>{{ log.role }}</h3>
+              <h4>{{ log.company }}</h4>
+              <p>{{ log.description }}</p>
             </div>
-        `).join('');
-    }
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+    </section>
 
-    function renderProjects() {
-        const container = document.getElementById('projects-container');
-        container.innerHTML = portfolioData.projects.map((project, index) => `
-            <div class="array-item">
-                <div class="array-item-header">
-                    <h3>PROJECT #${String(index + 1).padStart(2, '0')}</h3>
-                    <button class="btn-remove" onclick="removeProject(${index})">DELETE</button>
-                </div>
-                <div class="form-grid">
-                    <div class="form-group">
-                        <label class="form-label">Project Name</label>
-                        <input type="text" class="form-input" value="${project.name}"
-                               onchange="portfolioData.projects[${index}].name = this.value"
-                               placeholder="PROJECT NAME">
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label">GitHub URL</label>
-                        <input type="url" class="form-input" value="${project.github_url}"
-                               onchange="portfolioData.projects[${index}].github_url = this.value"
-                               placeholder="https://github.com/username/repo">
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Description</label>
-                    <textarea class="form-input form-textarea"
-                              onchange="portfolioData.projects[${index}].description = this.value"
-                              placeholder="Project description">${project.description}</textarea>
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Tags (comma-separated)</label>
-                    <input type="text" class="form-input" value="${project.tags.join(', ')}"
-                           onchange="portfolioData.projects[${index}].tags = this.value.split(',').map(t => t.trim())"
-                           placeholder="Python, FastAPI, MySQL">
-                </div>
+    <section id="projects" class="section">
+      <div class="container">
+        <h2 class="section-heading">SYSTEM MODULES</h2>
+        <div class="project-grid">
+          {% for project in data.projects %}
+          <div class="tech-card fade-in">
+            <div class="card-border"></div>
+            <h3>{{ project.name }}</h3>
+            <p class="desc">{{ project.description }}</p>
+
+            <div class="tags">
+              {% for tech in project.tags %}
+              <span>{{ tech }}</span>
+              {% endfor %}
             </div>
-        `).join('');
-    }
 
-    function addSkill() {
-        portfolioData.skills_bars.push({ name: "New Skill", level: 50 });
-        renderSkills();
-        showNotification('✓ SKILL ADDED', 'success');
-    }
+            <div class="project-footer" style="margin-top: 20px">
+              <a
+                href="{{ project.github_url }}"
+                target="_blank"
+                class="btn-link"
+              >
+                <span class="bracket">[</span> VIEW SOURCE
+                <span class="bracket">]</span>
+              </a>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+    </section>
 
-    function removeSkill(index) {
-        if (confirm('[ DELETE SKILL? ] This action cannot be undone.')) {
-            portfolioData.skills_bars.splice(index, 1);
-            renderSkills();
-            showNotification('✓ SKILL DELETED', 'success');
-        }
-    }
+    <footer id="contact">
+      <div class="footer-content">
+        <h3>{{ data.basics.name }}</h3>
+        <p class="footer-tag">END OF LINE.</p>
+        <div class="socials">
+          <a href="https://{{ data.basics.linkedin }}">LINKEDIN</a>
+          <a href="https://{{ data.basics.github }}">GITHUB</a>
+          <a href="mailto:{{ data.basics.email }}">EMAIL</a>
+        </div>
+        <p class="copyright">© 2025 {{ data.basics.name }}.</p>
+      </div>
+    </footer>
 
-    function addExperience() {
-        portfolioData.experience.push({
-            dates: "MONTH YEAR - MONTH YEAR",
-            role: "New Role",
-            company: "Company Name",
-            description: "Description of your role and achievements."
-        });
-        renderExperience();
-        showNotification('✓ EXPERIENCE ADDED', 'success');
-    }
-
-    function removeExperience(index) {
-        if (confirm('[ DELETE EXPERIENCE? ] This action cannot be undone.')) {
-            portfolioData.experience.splice(index, 1);
-            renderExperience();
-            showNotification('✓ EXPERIENCE DELETED', 'success');
-        }
-    }
-
-    function addProject() {
-        portfolioData.projects.push({
-            name: "New Project",
-            description: "Project description",
-            tags: ["Tag1", "Tag2"],
-            github_url: "https://github.com/username/repo"
-        });
-        renderProjects();
-        showNotification('✓ PROJECT ADDED', 'success');
-    }
-
-    function removeProject(index) {
-        if (confirm('[ DELETE PROJECT? ] This action cannot be undone.')) {
-            portfolioData.projects.splice(index, 1);
-            renderProjects();
-            showNotification('✓ PROJECT DELETED', 'success');
-        }
-    }
-
-    function collectBasicsData() {
-        portfolioData.basics.name = document.getElementById('basics-name').value;
-        portfolioData.basics.label = document.getElementById('basics-label').value;
-        portfolioData.basics.cf_rank = document.getElementById('basics-cf_rank').value;
-        portfolioData.basics.cgpa = document.getElementById('basics-cgpa').value;
-        portfolioData.basics.problems_solved = document.getElementById('basics-problems_solved').value;
-        portfolioData.basics.summary = document.getElementById('basics-summary').value;
-        portfolioData.basics.specialization = document.getElementById('basics-specialization').value;
-        portfolioData.basics.linkedin = document.getElementById('basics-linkedin').value;
-        portfolioData.basics.github = document.getElementById('basics-github').value;
-        portfolioData.basics.email = document.getElementById('basics-email').value;
-    }
-
-    async function saveData() {
-        const loadingBar = document.querySelector('.loading-bar');
-        loadingBar.classList.add('active');
-        
-        collectBasicsData();
-        
-        try {
-            const response = await fetch('/api/data', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(portfolioData)
-            });
-            
-            const result = await response.json();
-            
-            if (result.success) {
-                showNotification('✓ DATA SAVED SUCCESSFULLY', 'success');
-                document.getElementById('preview-iframe').src = '/admin/preview?' + new Date().getTime();
-            } else {
-                showNotification('✗ ERROR SAVING DATA', 'error');
-            }
-        } catch (error) {
-            showNotification('✗ ' + error.message, 'error');
-        } finally {
-            loadingBar.classList.remove('active');
-        }
-    }
-
-    function previewPortfolio() {
-        switchTab('preview');
-        document.querySelector('[onclick="switchTab(\'preview\')"]').click();
-    }
-
-    async function loadBackups() {
-        const loadingBar = document.querySelector('.loading-bar');
-        loadingBar.classList.add('active');
-        
-        try {
-            const response = await fetch('/api/backups');
-            const data = await response.json();
-            
-            if (data.backups.length === 0) {
-                alert('[ NO BACKUPS AVAILABLE ]');
-                return;
-            }
-            
-            const backupList = data.backups.map(b => 
-                `${b.filename} (${new Date(b.modified).toLocaleString()})`
-            ).join('\n');
-            
-            const selected = prompt('[ AVAILABLE BACKUPS ]\n\n' + backupList + '\n\nEnter filename to restore:');
-            
-            if (selected) {
-                await restoreBackup(selected.trim());
-            }
-        } catch (error) {
-            showNotification('✗ ' + error.message, 'error');
-        } finally {
-            loadingBar.classList.remove('active');
-        }
-    }
-
-    async function restoreBackup(filename) {
-        if (!confirm(`[ RESTORE FROM ${filename}? ]\nCurrent data will be backed up first.`)) return;
-        
-        const loadingBar = document.querySelector('.loading-bar');
-        loadingBar.classList.add('active');
-        
-        try {
-            const response = await fetch(`/api/restore/${filename}`, { method: 'POST' });
-            const result = await response.json();
-            
-            if (result.success) {
-                showNotification('✓ ' + result.message, 'success');
-                setTimeout(() => location.reload(), 1500);
-            } else {
-                showNotification('✗ ERROR RESTORING BACKUP', 'error');
-            }
-        } catch (error) {
-            showNotification('✗ ' + error.message, 'error');
-        } finally {
-            loadingBar.classList.remove('active');
-        }
-    }
-
-    function showNotification(message, type) {
-        const notification = document.getElementById('notification');
-        notification.textContent = message;
-        notification.className = 'notification ' + type;
-        notification.style.display = 'block';
-        
-        setTimeout(() => {
-            notification.style.display = 'none';
-        }, 3000);
-    }
-
-    // Initialize
-    renderSkills();
-    renderExperience();
-    renderProjects();
-
-    // Add keyboard shortcuts
-    document.addEventListener('keydown', (e) => {
-        if (e.ctrlKey || e.metaKey) {
-            if (e.key === 's') {
-                e.preventDefault();
-                saveData();
-            }
-        }
-    });
-</script>
-</body>
+    <script src="/static/index.js"></script>
+  </body>
 </html>
