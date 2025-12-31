@@ -2,6 +2,7 @@ from fastapi import FastAPI, Request, Form, HTTPException, Depends
 from fastapi.responses import HTMLResponse, RedirectResponse, JSONResponse
 from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles
+from fastapi.params import Body
 from fastapi.security import HTTPBasic, HTTPBasicCredentials
 import json
 import os
@@ -75,11 +76,12 @@ async def get_portfolio_data(username: str = Depends(verify_admin)):
 @app.post("/api/data")
 async def update_portfolio_data(
     request: Request,
-    username: str = Depends(verify_admin)
+    username: str = Depends(verify_admin),
+    data: dict = Body(...)
 ):
     """API endpoint to update portfolio data"""
     try:
-        data = await request.json()
+        # data = await request.json()
         save_data(data)
         return {"success": True, "message": "Data updated successfully"}
     except Exception as e:
