@@ -5,15 +5,17 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.params import Body
 from fastapi.security import HTTPBasic, HTTPBasicCredentials
 import json
-import os
+import os 
+from pathlib import Path
 import secrets
 from typing import Optional
 from datetime import datetime
 import shutil
 
 app = FastAPI()
-templates = Jinja2Templates(directory="templates")
-app.mount("/static", StaticFiles(directory="static"), name="static")
+BASE_DIR = Path(__file__).resolve().parent.parent
+templates = Jinja2Templates(directory=f"{BASE_DIR}/templates")
+app.mount("/static", StaticFiles(directory=f"{BASE_DIR}/static"), name="static")
 security = HTTPBasic()
 
 # Admin credentials (In production, use environment variables and hashed passwords)
@@ -22,7 +24,7 @@ ADMIN_PASSWORD = os.getenv("ADMIN_PASSWORD", "admin123")
 
 def get_data():
     """Load portfolio data from JSON file"""
-    with open("data.json", "r") as f:
+    with open(f"{BASE_DIR}/data.json", "r") as f:
         return json.load(f)
 
 def save_data(data):
@@ -31,10 +33,10 @@ def save_data(data):
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
     backup_dir = "backups"
     os.makedirs(backup_dir, exist_ok=True)
-    shutil.copy("data.json", f"{backup_dir}/data_backup_{timestamp}.json")
+    shutil.copy(f"{BASE_DIR}/data.json", f"{backup_dir}/data_backup_{timestamp}.json")
     
     # Save new data
-    with open("data.json", "w") as f:
+    with open(f"{BASE_DIR}/data.json", "w") as f:
         json.dump(data, f, indent=2)
 
 def verify_admin(credentials: HTTPBasicCredentials = Depends(security)):
@@ -43,6 +45,10 @@ def verify_admin(credentials: HTTPBasicCredentials = Depends(security)):
     correct_password = secrets.compare_digest(credentials.password, ADMIN_PASSWORD)
     
     if not (correct_username and correct_password):
+        print("Failed login attempt:", credentials.username)
+        print("Provided password:", credentials.password)
+        print("Expected username:", ADMIN_USERNAME)
+        print("Expected password:", ADMIN_PASSWORD)
         raise HTTPException(
             status_code=401,
             detail="Incorrect username or password",
