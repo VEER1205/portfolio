@@ -1,5 +1,5 @@
-from fastapi import FastAPI, Request, Form, HTTPException, Depends
-from fastapi.responses import HTMLResponse, RedirectResponse, JSONResponse
+from fastapi import FastAPI, Request, HTTPException, Depends
+from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles
 from fastapi.params import Body
@@ -8,9 +8,10 @@ import json
 import os 
 from pathlib import Path
 import secrets
-from typing import Optional
 from datetime import datetime
 import shutil
+from dotenv import load_dotenv
+from github import Github
 
 app = FastAPI()
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -18,26 +19,32 @@ templates = Jinja2Templates(directory=f"{BASE_DIR}/templates")
 app.mount("/static", StaticFiles(directory=f"{BASE_DIR}/static"), name="static")
 security = HTTPBasic()
 
-# Admin credentials (In production, use environment variables and hashed passwords)
+load_dotenv()
+
 ADMIN_USERNAME = os.getenv("ADMIN_USERNAME", "admin")
 ADMIN_PASSWORD = os.getenv("ADMIN_PASSWORD", "admin123")
+GITHUB_TOKEN = os.getenv("GITHUB_TOKEN")
+REPO_NAME = os.getenv("GITHUB_REPO")
+FILE_PATH = "data.json"
 
 def get_data():
-    """Load portfolio data from JSON file"""
-    with open(f"{BASE_DIR}/data.json", "r") as f:
-        return json.load(f)
+    g = Github(GITHUB_TOKEN)
+    repo = g.get_repo("VEER1205/portfolio")
+    contents = repo.get_contents(FILE_PATH)
+    return json.loads(contents.decoded_content.decode())
 
 def save_data(data):
-    """Save portfolio data to JSON file with backup"""
-    # Create backup
-    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-    backup_dir = "backups"
-    os.makedirs(backup_dir, exist_ok=True)
-    shutil.copy(f"{BASE_DIR}/data.json", f"{backup_dir}/data_backup_{timestamp}.json")
-    
-    # Save new data
-    with open(f"{BASE_DIR}/data.json", "w") as f:
-        json.dump(data, f, indent=2)
+    g = Github(GITHUB_TOKEN)
+    repo = g.get_repo("VEER1205/portfolio")
+
+    contents = repo.get_contents(FILE_PATH)
+
+    repo.update_file(
+        path=FILE_PATH,
+        message=f"Update portfolio data",
+        content=json.dumps(data, indent=2),
+        sha=contents.sha
+    )
 
 def verify_admin(credentials: HTTPBasicCredentials = Depends(security)):
     """Verify admin credentials"""
@@ -88,9 +95,11 @@ async def update_portfolio_data(
     """API endpoint to update portfolio data"""
     try:
         # data = await request.json()
+        print("Received data for update:", data)
         save_data(data)
         return {"success": True, "message": "Data updated successfully"}
     except Exception as e:
+        print("Error updating data:", str(e), "Data:", data)
         raise HTTPException(status_code=400, detail=str(e)+" --- "+str(data))
 
 @app.get("/api/backups")
