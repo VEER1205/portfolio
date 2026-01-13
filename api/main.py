@@ -29,13 +29,13 @@ FILE_PATH = "data.json"
 
 def get_data():
     g = Github(GITHUB_TOKEN)
-    repo = g.get_repo("VEER1205/portfolio")
+    repo = g.get_repo(REPO_NAME)
     contents = repo.get_contents(FILE_PATH)
     return json.loads(contents.decoded_content.decode())
 
 def save_data(data):
     g = Github(GITHUB_TOKEN)
-    repo = g.get_repo("VEER1205/portfolio")
+    repo = g.get_repo(REPO_NAME)
 
     contents = repo.get_contents(FILE_PATH)
 
