@@ -52,10 +52,6 @@ def verify_admin(credentials: HTTPBasicCredentials = Depends(security)):
     correct_password = secrets.compare_digest(credentials.password, ADMIN_PASSWORD)
     
     if not (correct_username and correct_password):
-        print("Failed login attempt:", credentials.username)
-        print("Provided password:", credentials.password)
-        print("Expected username:", ADMIN_USERNAME)
-        print("Expected password:", ADMIN_PASSWORD)
         raise HTTPException(
             status_code=401,
             detail="Incorrect username or password",
@@ -95,11 +91,11 @@ async def update_portfolio_data(
     """API endpoint to update portfolio data"""
     try:
         # data = await request.json()
-        print("Received data for update:", data)
+        # print("Received data for update:", data)
         save_data(data)
         return {"success": True, "message": "Data updated successfully"}
     except Exception as e:
-        print("Error updating data:", str(e), "Data:", data)
+        # print("Error updating data:", str(e), "Data:", data)
         raise HTTPException(status_code=400, detail=str(e)+" --- "+str(data))
 
 @app.get("/api/backups")
