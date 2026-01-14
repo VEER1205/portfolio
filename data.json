@@ -54,6 +54,12 @@
         "Python",
         "FastAPI",
         "MySQL"
+      ],
+      "bullet_points": [
+        "Integrated with MySQL database to support persistent data storage and advanced filtering/search features",
+        "Implemented complete CRUD functionality (add, edit, delete, view) for transaction and category records",
+        "Designed intuitive GUI using CustomTkinter for seamless user experience",
+        "Developed RESTful API endpoints with FastAPI to handle backend operations efficiently"
       ]
     }
   ],
