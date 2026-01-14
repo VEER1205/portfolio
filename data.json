@@ -61,6 +61,16 @@
         "Designed intuitive GUI using CustomTkinter for seamless user experience",
         "Developed RESTful API endpoints with FastAPI to handle backend operations efficiently"
       ]
+    },
+    {
+      "name": "Futuro Application Backend",
+      "description": "Your personal AI-powered guide to remove confusion and help youths choose the right career path.",
+      "tags": [
+        "FastAPI",
+        "Python",
+        "Google Gen AI"
+      ],
+      "github_url": "https://github.com/VEER1205/Hackathon-"
     }
   ],
   "skills_bars": [
