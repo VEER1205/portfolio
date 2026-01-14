@@ -34,6 +34,12 @@
         "Python",
         "KivyMD",
         "OOP"
+      ],
+      "bullet_points": [
+        "Designed and developed a visually appealing GUI using KivyMD framework for an engaging user experience",
+        "Implemented core game logic using Object-Oriented Programming principles to ensure modularity and maintainability",
+        "Incorporated features such as score tracking, player vs player mode, and reset functionality",
+        "Tested the application thoroughly to ensure smooth gameplay and responsiveness across different devices"
       ]
     },
     {
@@ -44,6 +50,12 @@
         "FastAPI",
         "MySQL",
         "Twilio"
+      ],
+      "bullet_points": [
+        "Developed a comprehensive FastAPI backend to manage patient records, appointments, and medical histories",
+        "Integrated Twilio API to automate SMS and call notifications for appointment reminders and health alerts",
+        "Implemented secure user authentication and role-based access control for patients and healthcare providers",
+        "Optimized database queries and API endpoints to ensure fast and reliable performance under high load"
       ]
     },
     {
@@ -70,7 +82,13 @@
         "Python",
         "Google Gen AI"
       ],
-      "github_url": "https://github.com/VEER1205/Hackathon-"
+      "github_url": "https://github.com/VEER1205/Hackathon-",
+      "bullet_points": [
+        "Engineered robust backend infrastructure using FastAPI to handle user requests and data management",
+        "Integrated Google's Generative AI APIs to provide personalized career guidance and recommendations",
+        "Implemented secure user authentication and data storage mechanisms to protect user information",
+        "Collaborated with frontend developers to ensure seamless integration between backend services and user interface"
+      ]
     }
   ],
   "skills_bars": [
