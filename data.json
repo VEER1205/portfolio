@@ -33,6 +33,7 @@
         "Incorporated features such as score tracking, player vs player mode, and reset functionality",
         "Tested the application thoroughly to ensure smooth gameplay and responsiveness across different devices"
       ],
+      "date": "Mar 2025",
       "description": "GUI-based Tic-Tac-Toe game using KivyMD. Implemented clean OOP architecture.",
       "github_url": "https://github.com/VEER1205/X-and-O",
       "name": "X AND O (GAME)",
@@ -40,8 +41,7 @@
         "Python",
         "KivyMD",
         "OOP"
-      ],
-      "date": "Mar 2025"
+      ]
     },
     {
       "bullet_points": [
@@ -50,6 +50,7 @@
         "Implemented secure user authentication and role-based access control for patients and healthcare providers",
         "Optimized database queries and API endpoints to ensure fast and reliable performance under high load"
       ],
+      "date": "Oct 2025",
       "description": "Healthcare management system with automated SMS/Call notifications.",
       "github_url": "https://github.com/VEER1205/MedRed",
       "name": "MEDRED",
@@ -57,8 +58,7 @@
         "FastAPI",
         "MySQL",
         "Twilio"
-      ],
-      "date": "Oct 2025"
+      ]
     },
     {
       "bullet_points": [
@@ -67,6 +67,7 @@
         "Designed intuitive GUI using CustomTkinter for seamless user experience",
         "Developed RESTful API endpoints with FastAPI to handle backend operations efficiently"
       ],
+      "date": "Mar 2025",
       "description": "Desktop finance application with a FastAPI backend.",
       "github_url": "https://github.com/VEER1205/Money-Management",
       "name": "MONEY MANAGER",
@@ -74,8 +75,7 @@
         "Python",
         "FastAPI",
         "MySQL"
-      ],
-      "date": "Mar 2025"
+      ]
     },
     {
       "bullet_points": [
@@ -84,6 +84,7 @@
         "Implemented secure user authentication and data storage mechanisms to protect user information",
         "Collaborated with frontend developers to ensure seamless integration between backend services and user interface"
       ],
+      "date": "Aug 2025",
       "description": "Your personal AI-powered guide to remove confusion and help youths choose the right career path.",
       "github_url": "https://github.com/VEER1205/Hackathon-",
       "name": "Futuro Application Backend",
@@ -91,8 +92,7 @@
         "FastAPI",
         "Python",
         "Google Gen AI"
-      ],
-      "date": "Aug 2025"
+      ]
     }
   ],
   "skills_bars": [
@@ -109,7 +109,7 @@
       "name": "SQL / Database"
     },
     {
-      "level": 80,
+      "level": 85,
       "name": "FastAPI / Node.js"
     }
   ]
