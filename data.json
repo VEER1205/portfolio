@@ -27,6 +27,12 @@
   ],
   "projects": [
     {
+      "bullet_points": [
+        "Designed and developed a visually appealing GUI using KivyMD framework for an engaging user experience",
+        "Implemented core game logic using Object-Oriented Programming principles to ensure modularity and maintainability",
+        "Incorporated features such as score tracking, player vs player mode, and reset functionality",
+        "Tested the application thoroughly to ensure smooth gameplay and responsiveness across different devices"
+      ],
       "description": "GUI-based Tic-Tac-Toe game using KivyMD. Implemented clean OOP architecture.",
       "github_url": "https://github.com/VEER1205/X-and-O",
       "name": "X AND O (GAME)",
@@ -34,15 +40,15 @@
         "Python",
         "KivyMD",
         "OOP"
-      ],
-      "bullet_points": [
-        "Designed and developed a visually appealing GUI using KivyMD framework for an engaging user experience",
-        "Implemented core game logic using Object-Oriented Programming principles to ensure modularity and maintainability",
-        "Incorporated features such as score tracking, player vs player mode, and reset functionality",
-        "Tested the application thoroughly to ensure smooth gameplay and responsiveness across different devices"
       ]
     },
     {
+      "bullet_points": [
+        "Developed a comprehensive FastAPI backend to manage patient records, appointments, and medical histories",
+        "Integrated Twilio API to automate SMS and call notifications for appointment reminders and health alerts",
+        "Implemented secure user authentication and role-based access control for patients and healthcare providers",
+        "Optimized database queries and API endpoints to ensure fast and reliable performance under high load"
+      ],
       "description": "Healthcare management system with automated SMS/Call notifications.",
       "github_url": "https://github.com/VEER1205/MedRed",
       "name": "MEDRED",
@@ -50,15 +56,15 @@
         "FastAPI",
         "MySQL",
         "Twilio"
-      ],
-      "bullet_points": [
-        "Developed a comprehensive FastAPI backend to manage patient records, appointments, and medical histories",
-        "Integrated Twilio API to automate SMS and call notifications for appointment reminders and health alerts",
-        "Implemented secure user authentication and role-based access control for patients and healthcare providers",
-        "Optimized database queries and API endpoints to ensure fast and reliable performance under high load"
       ]
     },
     {
+      "bullet_points": [
+        "Integrated with MySQL database to support persistent data storage and advanced filtering/search features",
+        "Implemented complete CRUD functionality (add, edit, delete, view) for transaction and category records",
+        "Designed intuitive GUI using CustomTkinter for seamless user experience",
+        "Developed RESTful API endpoints with FastAPI to handle backend operations efficiently"
+      ],
       "description": "Desktop finance application with a FastAPI backend.",
       "github_url": "https://github.com/VEER1205/Money-Management",
       "name": "MONEY MANAGER",
@@ -66,28 +72,22 @@
         "Python",
         "FastAPI",
         "MySQL"
-      ],
-      "bullet_points": [
-        "Integrated with MySQL database to support persistent data storage and advanced filtering/search features",
-        "Implemented complete CRUD functionality (add, edit, delete, view) for transaction and category records",
-        "Designed intuitive GUI using CustomTkinter for seamless user experience",
-        "Developed RESTful API endpoints with FastAPI to handle backend operations efficiently"
       ]
     },
     {
-      "name": "Futuro Application Backend",
-      "description": "Your personal AI-powered guide to remove confusion and help youths choose the right career path.",
-      "tags": [
-        "FastAPI",
-        "Python",
-        "Google Gen AI"
-      ],
-      "github_url": "https://github.com/VEER1205/Hackathon-",
       "bullet_points": [
         "Engineered robust backend infrastructure using FastAPI to handle user requests and data management",
         "Integrated Google's Generative AI APIs to provide personalized career guidance and recommendations",
         "Implemented secure user authentication and data storage mechanisms to protect user information",
         "Collaborated with frontend developers to ensure seamless integration between backend services and user interface"
+      ],
+      "description": "Your personal AI-powered guide to remove confusion and help youths choose the right career path.",
+      "github_url": "https://github.com/VEER1205/Hackathon-",
+      "name": "Futuro Application Backend",
+      "tags": [
+        "FastAPI",
+        "Python",
+        "Google Gen AI"
       ]
     }
   ],
