@@ -21,9 +21,9 @@
 
     <nav class="navbar">
       <div class="nav-container">
-        <a href="#" class="logo"
-          >{{ data.basics.name }}<span class="dot">.</span></a
-        >
+        <a href="/" class="logo">
+          {{ data.basics.name }}<span class="dot">.</span>
+        </a>
         <div class="menu-toggle" id="mobile-menu">
           <span class="bar"></span>
           <span class="bar"></span>
@@ -51,10 +51,26 @@
           <span class="bracket">]</span>
         </div>
 
+        <div class="hero-socials">
+            <a href="https://{{ data.basics.github }}" target="_blank">
+                <span class="bracket">[</span> GITHUB <span class="bracket">]</span>
+            </a>
+            <a href="https://{{ data.basics.linkedin }}" target="_blank">
+                <span class="bracket">[</span> LINKEDIN <span class="bracket">]</span>
+            </a>
+            <a href="mailto:{{ data.basics.email }}">
+                <span class="bracket">[</span> EMAIL <span class="bracket">]</span>
+            </a>
+        </div>
+
         <div class="hero-stats">
           <div class="stat-item">
             <span class="stat-val">{{ data.basics.cf_rank }}</span>
             <span class="stat-label">CODEFORCES</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-val">{{ data.basics.cc_rating }}</span>
+            <span class="stat-label">CODECHEF</span>
           </div>
           <div class="stat-item">
             <span class="stat-val">{{ data.basics.cgpa }}</span>

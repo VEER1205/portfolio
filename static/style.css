@@ -158,8 +158,56 @@ body {
     margin-bottom: 40px;
 }
 
+/* --- HERO SOCIAL LINKS (Fixed Color & Spacing) --- */
+.hero-socials {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 40px;          /* Wider gap between the links */
+    margin-top: 30px;   /* Space above (separating from subtitle) */
+    margin-bottom: 50px;/* Space below (pushing the stats down) */
+    font-family: var(--font-head);
+    font-weight: 700;
+    position: relative;
+    z-index: 10;
+}
+
+/* Force color to override browser blue/purple defaults */
+.hero-socials a,
+.hero-socials a:link,
+.hero-socials a:visited {
+    text-decoration: none;
+    color: var(--text-dim); /* Uses your theme's grey (#888888) */
+    font-size: 1rem;
+    letter-spacing: 3px;    /* Wider text for "Tech" feel */
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+}
+
+/* Hover Effect */
+.hero-socials a:hover {
+    color: white;
+    text-shadow: 0 0 12px var(--accent-red); /* Glowing effect */
+    transform: translateY(-2px); /* Slight lift */
+}
+
+/* Bracket Styling [ ] */
+.hero-socials .bracket {
+    color: var(--accent-red);
+    margin: 0 5px;
+    font-weight: 400;
+    opacity: 0.8;
+    transition: 0.3s;
+}
+
+.hero-socials a:hover .bracket {
+    opacity: 1;
+    text-shadow: 0 0 15px var(--accent-red);
+}
+
 .bracket { color: var(--accent-red); margin: 0 10px; }
 
+/* STATS */
 .hero-stats {
     display: flex;
     justify-content: center;
@@ -393,4 +441,11 @@ footer {
     .nav-links { display: none; } /* Add JS toggle */
     .menu-toggle { display: block; cursor: pointer; }
     .bar { display: block; width: 25px; height: 3px; background: white; margin: 5px auto; }
+    
+    /* NEW: Proper stacking for social links on mobile */
+    .hero-socials {
+        flex-direction: column;
+        gap: 15px;
+        margin-bottom: 30px;
+    }
 }

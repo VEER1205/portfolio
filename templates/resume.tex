@@ -1,0 +1,198 @@
+%-------------------------
+% Modern Professional Resume - ALIAS LINKS & LARGER TITLES
+% Veer Bhadresh Dodiya
+%------------------------
+
+\documentclass[letterpaper,11pt]{article}
+
+\usepackage{latexsym}
+\usepackage[empty]{fullpage}
+\usepackage{titlesec}
+\usepackage{marvosym}
+\usepackage[usenames,dvipsnames]{color}
+\usepackage{verbatim}
+\usepackage{enumitem}
+\usepackage[hidelinks]{hyperref}
+\usepackage{fancyhdr}
+\usepackage[english]{babel}
+\usepackage{tabularx}
+\usepackage{fontawesome5}
+\usepackage{multicol}
+\usepackage{xcolor}
+\input{glyphtounicode}
+
+% Define custom colors
+\definecolor{primary}{RGB}{0, 85, 185}      % Medical Red (MedRed theme)
+\definecolor{secondary}{RGB}{64, 64, 64}
+\definecolor{accent}{RGB}{0, 60, 140}  % Dark Red accent
+
+% \definecolor\{primary\}{RGB\}{0, 85, 185\} 
+% % Professional Royal Blue
+% \definecolor\{secondary\}{RGB\}{64, 64, 64\} 
+% % Dark Grey for text 
+% \definecolor\{accent\}{RGB\}{0, 60, 140\}  
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyfoot{}
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrulewidth}{0pt}
+
+% Adjust margins
+\addtolength{\oddsidemargin}{-0.6in}
+\addtolength{\evensidemargin}{-0.5in}
+\addtolength{\textwidth}{1.2in}
+\addtolength{\topmargin}{-.6in}
+\addtolength{\textheight}{1.2in}
+
+\urlstyle{same}
+
+\raggedbottom
+\raggedright
+\setlength{\tabcolsep}{0in}
+
+% --- SECTION FORMATTING (INCREASED SIZE) ---
+% Changed \large to \Large here for bigger titles
+\titleformat{\section}{
+  \vspace{-10pt}\scshape\raggedright\Large\bfseries\color{primary}
+}{}{0em}{}[\color{primary}\titlerule \vspace{-6pt}]
+
+% Ensure that generate pdf is machine readable/ATS parsable
+\pdfgentounicode=1
+
+%-------------------------
+% Custom commands
+\newcommand{\resumeItem}[1]{
+  \item\small{
+    {#1 \vspace{-2pt}}
+  }
+}
+
+\newcommand{\resumeSubheading}[4]{
+  \vspace{-2pt}\item
+    \begin{tabular*}{0.98\textwidth}[t]{l@{\extracolsep{\fill}}r}
+      \textbf{\color{secondary}#1} & \textbf{\small #2} \\
+      \textit{\small#3} & \textit{\small #4} \\
+    \end{tabular*}\vspace{-6pt}
+}
+
+\newcommand{\resumeProjectHeading}[2]{
+    \item
+    \begin{tabular*}{0.98\textwidth}{l@{\extracolsep{\fill}}r}
+      \textbf{\small\color{secondary}#1} & \textbf{\small #2} \\
+    \end{tabular*}\vspace{-6pt}
+}
+
+\newcommand{\resumeSubHeadingListStart}{\begin{itemize}[leftmargin=0.15in, label={}]}
+\newcommand{\resumeSubHeadingListEnd}{\end{itemize}}
+\newcommand{\resumeItemListStart}{\begin{itemize}[leftmargin=0.15in, label=$\bullet$]}
+\newcommand{\resumeItemListEnd}{\end{itemize}\vspace{-5pt}}
+
+%-------------------------------------------
+%%%%%%  RESUME STARTS HERE  %%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{document}
+
+%----------HEADING----------
+\begin{center}
+    \textbf{\Huge \scshape \color{primary}VEER BHADRESH DODIYA} \\ \vspace{5pt}
+    \textit{\normalsize Data Science Student \& Backend Developer} \\ \vspace{6pt}
+    \small 
+    \faPhone\ +91-8591770844 $|$ 
+    \faEnvelope\ \href{mailto:dodiyaveer12@gmail.com}{\underline{Email}} $|$ 
+    % --- ALIASED LINKS (Clickable text) ---
+    \faLinkedin\ \href{https://linkedin.com/in/veer-Dodiya}{\underline{LinkedIn}} $|$
+    \faGithub\ \href{https://github.com/VEER1205}{\underline{GitHub}} $|$
+    \faCode\ \href{https://www.hackerrank.com/profile/dodiyaveer12}{\underline{HackerRank}}
+\end{center}
+
+\vspace{-14pt}
+
+%-----------EDUCATION-----------
+\section{Education}
+  \resumeSubHeadingListStart
+    \resumeSubheading
+      {Dwarkadas J. Sanghvi College of Engineering}{Mumbai, India}
+      {B.Tech in Computer Science \& Engineering (Data Science) | CGPA: 8.305/10}{2024 -- 2028}
+      
+    \resumeSubheading
+      {SVP Junior College of Science and Commerce}{Mumbai, India}
+      {HSC (Science) | CET: 97.68 percentile}{2024}
+  \resumeSubHeadingListEnd
+
+%-----------EXPERIENCE-----------
+\section{Experience}
+  \resumeSubHeadingListStart
+    \resumeSubheading
+      {Backend Developer (Team Futuro)}{Sept. 2025 -- Dec. 2025}
+      {Google's Gen AI Hackathon (Hack2Skill)}{Mumbai, India}
+      \resumeItemListStart
+        \resumeItem{Architected scalable microservices handling \textbf{500+ daily requests}, implementing JWT auth and RBAC for security.}
+        \resumeItem{Integrated \textbf{Google Gemini AI APIs} to automate content generation, reducing manual workflows by \textbf{60\%}.}
+        \resumeItem{Optimized database queries and API response times by \textbf{40\%} through indexing and query restructuring.}
+      \resumeItemListEnd
+      
+    \resumeSubheading
+      {Backend Developer}{Sept. 2025}
+      {Bit and Build Hackathon (Top 40 State Rank)}{Mumbai, India}
+      \resumeItemListStart
+        \resumeItem{\textbf{Secured Top 40 position} among 150+ teams by engineering the complete backend for 'Paisa Buddy' (FinTech).}
+        \resumeItem{Built secure transaction APIs handling concurrent requests with \textbf{sub-200ms latency} using Node.js/Express.}
+        \resumeItem{Designed a robust schema for real-time balance tracking and implemented bcrypt hashing for user security.}
+      \resumeItemListEnd
+  \resumeSubHeadingListEnd
+
+%-----------PROJECTS-----------
+\section{Projects}
+    \resumeSubHeadingListStart
+    
+      \resumeProjectHeading
+          {\textbf{MedRed - Healthcare System} $|$ \emph{FastAPI, MySQL, Twilio, APScheduler}}{Aug. 2025 -- Present}
+          \resumeItemListStart
+            \resumeItem{Engineered a medicine adherence system with \textbf{99\% delivery success} via automated Twilio SMS/Call notifications.}
+            \resumeItem{Developed \textbf{15+ RESTful endpoints} and background tasks (APScheduler) for persistent state management.}
+            \resumeItem{Designed a normalized MySQL database using UUIDs to ensure data integrity across users and schedules.}
+          \resumeItemListEnd
+          
+      \resumeProjectHeading
+          {\textbf{Money Management App} $|$ \emph{Python, FastAPI, CustomTkinter, MySQL}}{Aug. 2025 -- Present}
+          \resumeItemListStart
+            \resumeItem{Built a cross-platform finance tracker with a FastAPI backend handling complex transaction queries.}
+            \resumeItem{Implemented \textbf{automatic categorization logic} and Matplotlib visualizations for spending insights.}
+            \resumeItem{Reduced manual tracking time by \textbf{70\%} through efficient CRUD operations and optimized SQL logic.}
+          \resumeItemListEnd
+          
+      \resumeProjectHeading
+          {\textbf{X and O (AI Game)} $|$ \emph{Python, KivyMD, Minimax Algorithm}}{Aug. 2025}
+          \resumeItemListStart
+            \resumeItem{Developed an interactive GUI game featuring an unbeatable AI opponent using the \textbf{Minimax algorithm}.}
+            \resumeItem{Implemented clean OOP architecture to separate game logic from UI state management.}
+          \resumeItemListEnd
+    \resumeSubHeadingListEnd
+
+%-----------TECHNICAL SKILLS-----------
+\section{Technical Skills}
+ \begin{itemize}[leftmargin=0.15in, label={}]
+    \small{\item{
+     \textbf{Languages}{: Python (Advanced), JavaScript, Java, C++, SQL} \\
+     \textbf{Backend}{: FastAPI, Node.js, Express.js, Django, REST APIs, Microservices} \\
+     \textbf{Databases}{: MySQL (Normalization, Indexing, Optimization), MongoDB} \\
+     \textbf{Tools/DevOps}{: Git, GitHub, Postman, VS Code, Docker (Learning)} \\
+     \textbf{Libraries/APIs}{: Twilio, Google Gemini AI, JWT, Pandas, NumPy}
+    }}
+ \end{itemize}
+
+%-----------ACHIEVEMENTS-----------
+\section{Achievements}
+ \resumeSubHeadingListStart
+    \resumeItem{\textbf{Hackathon Success:} Top 40 position among 150+ teams in Bit and Build Hackathon (Sept. 2025), Maharashtra. Built complete backend for Paisa Buddy financial management application using Express.js and Node.js.}
+    
+    \resumeItem{\textbf{Competitive Programming:} Codeforces Rating: 866 (Newbie) -- CodeChef Rating: 990 -- HackerRank 5-star in Python \& SQL -- Active problem solver across multiple competitive programming platforms.}
+    
+    \resumeItem{\textbf{Problem Solving Expertise:} Solved 100+ coding problems across platforms -- 50+ Data Structures \& Algorithms problems and 50+ MySQL database optimization problems on LeetCode, demonstrating strong algorithmic thinking and SQL proficiency.}
+    
+    \resumeItem{\textbf{Certifications \& Training:} Machine Learning Bootcamp (DJS S4DS) -- Python for Beginners (HackerRank) -- MySQL Basics (HackerRank) -- Data Visualisation using Python (Infosys Springboard).}
+ \resumeSubHeadingListEnd
+
+%-------------------------------------------
+\end{document}
