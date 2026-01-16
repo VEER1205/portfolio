@@ -27,14 +27,27 @@ GITHUB_TOKEN = os.getenv("GITHUB_TOKEN")
 REPO_NAME = os.getenv("GITHUB_REPO")
 FILE_PATH = "data.json"
 
+import json
+
 def get_data():
     try:
+        # 1. Attempt to fetch from GitHub
         g = Github(GITHUB_TOKEN)
         repo = g.get_repo(REPO_NAME)
         contents = repo.get_contents(FILE_PATH)
         return json.loads(contents.decoded_content.decode())
+        
     except Exception as e:
-        print(f"Error fetching data from GitHub: {e}")
+        # 2. If GitHub fails, print error and fall back to local file
+        print(f"⚠️ GitHub Error: {e}")
+        print("🔄 Switching to local file on server...")
+        
+        try:
+            with open(f"{BASE_DIR}/data.json", "r") as f:
+                return json.load(f)
+        except FileNotFoundError:
+            print("❌ Critical Error: Local data.json also not found.")
+            return {} 
 
 def save_data(data):
     g = Github(GITHUB_TOKEN)
