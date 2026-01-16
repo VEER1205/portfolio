@@ -720,7 +720,6 @@
 <div class="loading-bar"></div>
 
 <div class="container">
-    <!-- Terminal Header -->
     <div class="terminal-header">
         <div class="header-content">
             <h1 class="terminal-title">ADMIN:CONTROL</h1>
@@ -736,7 +735,6 @@
         </div>
     </div>
 
-    <!-- Action Bar -->
     <div class="actions-bar">
         <button class="btn btn-success" onclick="saveData()">💾 SAVE CHANGES</button>
         <button class="btn btn-secondary" onclick="previewPortfolio()">👁️ PREVIEW</button>
@@ -744,7 +742,6 @@
         <a href="/" class="btn btn-secondary" target="_blank">🌐 LIVE SITE</a>
     </div>
 
-    <!-- Navigation System -->
     <div class="nav-system">
         <div class="tabs-container">
             <button class="tab active" onclick="switchTab('basics')">BASIC INFO</button>
@@ -755,7 +752,6 @@
         </div>
     </div>
 
-    <!-- BASICS TAB -->
     <div id="basics-tab" class="tab-content active">
         <div class="form-section">
             <h2 class="section-title">BASIC INFORMATION</h2>
@@ -806,7 +802,6 @@
         </div>
     </div>
 
-    <!-- SKILLS TAB -->
     <div id="skills-tab" class="tab-content">
         <div class="form-section">
             <h2 class="section-title">SKILLS DATABASE</h2>
@@ -815,7 +810,6 @@
         </div>
     </div>
 
-    <!-- EXPERIENCE TAB -->
     <div id="experience-tab" class="tab-content">
         <div class="form-section">
             <h2 class="section-title">MISSION LOGS</h2>
@@ -824,7 +818,6 @@
         </div>
     </div>
 
-    <!-- PROJECTS TAB -->
     <div id="projects-tab" class="tab-content">
         <div class="form-section">
             <h2 class="section-title">SYSTEM MODULES</h2>
@@ -833,7 +826,6 @@
         </div>
     </div>
 
-    <!-- PREVIEW TAB -->
     <div id="preview-tab" class="tab-content">
         <div class="form-section">
             <h2 class="section-title">LIVE PREVIEW</h2>
@@ -855,7 +847,10 @@
         document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
         document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
         
-        event.target.classList.add('active');
+        // Find the button that triggered this or select by index if called manually
+        const tabBtn = Array.from(document.querySelectorAll('.tab')).find(btn => btn.innerText.includes(tabName.toUpperCase()) || (tabName === 'preview' && btn.innerText.includes('LIVE PREVIEW')));
+        if(tabBtn) tabBtn.classList.add('active');
+        
         document.getElementById(tabName + '-tab').classList.add('active');
         
         if (tabName === 'skills') renderSkills();
@@ -932,7 +927,15 @@
 
     function renderProjects() {
         const container = document.getElementById('projects-container');
-        container.innerHTML = portfolioData.projects.map((project, index) => `
+        container.innerHTML = portfolioData.projects.map((project, index) => {
+            // Handle bullet_points array -> new line separated string
+            const bulletString = Array.isArray(project.bullet_points) ? project.bullet_points.join('\n') : '';
+            // Handle tags array -> comma separated string
+            const tagsString = Array.isArray(project.tags) ? project.tags.join(', ') : '';
+            // Handle date
+            const dateVal = project.date || '';
+
+            return `
             <div class="array-item">
                 <div class="array-item-header">
                     <h3>PROJECT #${String(index + 1).padStart(2, '0')}</h3>
@@ -946,26 +949,45 @@
                                placeholder="PROJECT NAME">
                     </div>
                     <div class="form-group">
-                        <label class="form-label">GitHub URL</label>
-                        <input type="url" class="form-input" value="${project.github_url}"
-                               onchange="portfolioData.projects[${index}].github_url = this.value"
-                               placeholder="https://github.com/username/repo">
+                        <label class="form-label">Date</label>
+                        <input type="text" class="form-input" value="${dateVal}"
+                               onchange="portfolioData.projects[${index}].date = this.value"
+                               placeholder="AUG 2025">
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="form-label">Description</label>
-                    <textarea class="form-input form-textarea"
+                    <label class="form-label">GitHub URL</label>
+                    <input type="url" class="form-input" value="${project.github_url}"
+                           onchange="portfolioData.projects[${index}].github_url = this.value"
+                           placeholder="https://github.com/username/repo">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Short Description</label>
+                    <input type="text" class="form-input" value="${project.description}"
                               onchange="portfolioData.projects[${index}].description = this.value"
-                              placeholder="Project description">${project.description}</textarea>
+                              placeholder="One line description">
                 </div>
                 <div class="form-group">
                     <label class="form-label">Tags (comma-separated)</label>
-                    <input type="text" class="form-input" value="${project.tags.join(', ')}"
+                    <input type="text" class="form-input" value="${tagsString}"
                            onchange="portfolioData.projects[${index}].tags = this.value.split(',').map(t => t.trim())"
                            placeholder="Python, FastAPI, MySQL">
                 </div>
+                <div class="form-group">
+                    <label class="form-label">Bullet Points (One per line)</label>
+                    <textarea class="form-input form-textarea" rows="5"
+                              placeholder="Feature 1&#10;Feature 2&#10;Feature 3"
+                              onchange="updateProjectBullets(${index}, this.value)">${bulletString}</textarea>
+                </div>
             </div>
-        `).join('');
+            `;
+        }).join('');
+    }
+
+    function updateProjectBullets(index, textValue) {
+        // Split by newline, trim whitespace, remove empty lines
+        const bullets = textValue.split('\n').map(line => line.trim()).filter(line => line !== '');
+        portfolioData.projects[index].bullet_points = bullets;
     }
 
     function addSkill() {
@@ -1004,8 +1026,10 @@
     function addProject() {
         portfolioData.projects.push({
             name: "New Project",
+            date: "JAN 2026",
             description: "Project description",
             tags: ["Tag1", "Tag2"],
+            bullet_points: ["Feature 1", "Feature 2"],
             github_url: "https://github.com/username/repo"
         });
         renderProjects();
@@ -1050,7 +1074,11 @@
             
             if (result.success) {
                 showNotification('✓ DATA SAVED SUCCESSFULLY', 'success');
-                document.getElementById('preview-iframe').src = '/admin/preview?' + new Date().getTime();
+                // Refresh preview if needed
+                const previewFrame = document.getElementById('preview-iframe');
+                if (previewFrame) {
+                    previewFrame.src = '/admin/preview?' + new Date().getTime();
+                }
             } else {
                 showNotification('✗ ERROR SAVING DATA', 'error');
             }
@@ -1063,7 +1091,6 @@
 
     function previewPortfolio() {
         switchTab('preview');
-        document.querySelector('[onclick="switchTab(\'preview\')"]').click();
     }
 
     async function loadBackups() {
