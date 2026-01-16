@@ -434,7 +434,7 @@ footer {
 
 /* RESPONSIVE */
 @media (max-width: 768px) {
-    .glitch-text { font-size: 3rem; }
+    .glitch-text { font-size: 3rem;padding-top: 100px; }
     .about-grid { grid-template-columns: 1fr; }
     .hero-stats { flex-direction: column; gap: 20px; align-items: center; }
     .stat-item { border: none; padding: 0; }
