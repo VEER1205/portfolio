@@ -39,14 +39,14 @@ def get_data():
         
     except Exception as e:
         # 2. If GitHub fails, print error and fall back to local file
-        print(f"⚠️ GitHub Error: {e}")
-        print("🔄 Switching to local file on server...")
+        print(f"[WARN] GitHub Error: {e}")
+        print("[INFO] Switching to local file on server...")
         
         try:
             with open(f"{BASE_DIR}/data.json", "r") as f:
                 return json.load(f)
         except FileNotFoundError:
-            print("❌ Critical Error: Local data.json also not found.")
+            print("[ERROR] Critical Error: Local data.json also not found.")
             return {} 
 
 def save_data(data):

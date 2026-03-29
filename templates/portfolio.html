@@ -1,190 +1,254 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>{{ data.basics.name }} | {{ data.basics.label }}</title>
-    <link
-      href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Roboto:wght@300;400;500&display=swap"
-      rel="stylesheet"
-    />
-    <link rel="stylesheet" href="/static/style.css" />
-  </head>
-  <body>
-    <div class="scan-line"></div>
-    <div class="background-grid"></div>
 
-    <div class="hud-corner top-left">SYS: ONLINE</div>
-    <div class="hud-corner top-right">CF RANK: {{ data.basics.cf_rank }}</div>
-    <div class="hud-corner bottom-left">MUMBAI, IN</div>
-    <div class="hud-corner bottom-right">VER: 2.0</div>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{{ data.basics.name }} | {{ data.basics.label }}</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Roboto:wght@300;400;500&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="/static/style.css" />
+</head>
 
-    <nav class="navbar">
-      <div class="nav-container">
-        <a href="/" class="logo">
-          {{ data.basics.name }}<span class="dot">.</span>
-        </a>
-        <div class="menu-toggle" id="mobile-menu">
-          <span class="bar"></span>
-          <span class="bar"></span>
-          <span class="bar"></span>
-        </div>
-        <ul class="nav-links">
-          <li><a href="#hero">HOME</a></li>
-          <li><a href="#about">DATA</a></li>
-          <li><a href="#experience">LOGS</a></li>
-          <li><a href="#projects">PROJECTS</a></li>
-          <li><a href="#contact">CONTACT</a></li>
+<body>
+  <!-- Galaxy WebGL Background -->
+  <div id="galaxy-bg"></div>
+
+  <div class="scan-line"></div>
+  <div class="background-grid"></div>
+
+
+  <div class="hud-corner bottom-left">MUMBAI, IN</div>
+  <div class="hud-corner bottom-right">VER: 2.0</div>
+
+  <div class="staggered-menu-wrapper fixed-wrapper" style="--sm-accent: #ff2a2a;" data-position="right">
+    
+    <div class="sm-prelayers" aria-hidden="true">
+      <div class="sm-prelayer" style="background: rgba(15, 15, 15, 0.9)"></div>
+      <div class="sm-prelayer" style="background: rgba(25, 25, 25, 0.9)"></div>
+    </div>
+
+    <header class="staggered-menu-header" aria-label="Main navigation header">
+      <div class="sm-logo" aria-label="Logo">
+          <a href="/" class="logo" style="pointer-events: auto;">
+            {{ data.basics.name }}<span class="dot">.</span>
+          </a>
+      </div>
+      
+      <button class="sm-toggle" aria-label="Open menu" aria-expanded="false" aria-controls="staggered-menu-panel" type="button">
+        <span class="sm-toggle-textWrap" aria-hidden="true">
+          <span class="sm-toggle-textInner">
+            <span class="sm-toggle-line">Menu</span>
+            <span class="sm-toggle-line">Close</span>
+          </span>
+        </span>
+        <span class="sm-icon" aria-hidden="true">
+          <span class="sm-icon-line"></span>
+          <span class="sm-icon-line sm-icon-line-v"></span>
+        </span>
+      </button>
+    </header>
+
+    <aside id="staggered-menu-panel" class="staggered-menu-panel" aria-hidden="true">
+      <div class="sm-panel-inner">
+        <ul class="sm-panel-list" role="list" data-numbering="true">
+          <li class="sm-panel-itemWrap">
+            <a class="sm-panel-item" href="#hero" data-index="1">
+              <span class="sm-panel-itemLabel">HOME</span>
+            </a>
+          </li>
+          <li class="sm-panel-itemWrap">
+            <a class="sm-panel-item" href="#about" data-index="2">
+              <span class="sm-panel-itemLabel">DATA</span>
+            </a>
+          </li>
+          <li class="sm-panel-itemWrap">
+            <a class="sm-panel-item" href="#experience" data-index="3">
+              <span class="sm-panel-itemLabel">LOGS</span>
+            </a>
+          </li>
+          <li class="sm-panel-itemWrap">
+            <a class="sm-panel-item" href="#projects" data-index="4">
+              <span class="sm-panel-itemLabel">PROJECTS</span>
+            </a>
+          </li>
+          <li class="sm-panel-itemWrap">
+            <a class="sm-panel-item" href="#contact" data-index="5">
+              <span class="sm-panel-itemLabel">CONTACT</span>
+            </a>
+          </li>
         </ul>
-      </div>
-    </nav>
-
-    <section id="hero" class="hero-section">
-      <div class="hero-content">
-        <p class="overline">ARCHITECTING SCALABLE SOLUTIONS</p>
-        <h1 class="glitch-text" data-text="{{ data.basics.name }}">
-          {{ data.basics.name }}
-        </h1>
-        <div class="subtitle-container">
-          <span class="bracket">[</span>
-          <span id="typed-text"></span>
-          <span class="bracket">]</span>
-        </div>
-
-        <div class="hero-socials">
-            <a href="https://{{ data.basics.github }}" target="_blank">
-                <span class="bracket">[</span> GITHUB <span class="bracket">]</span>
-            </a>
-            <a href="https://{{ data.basics.linkedin }}" target="_blank">
-                <span class="bracket">[</span> LINKEDIN <span class="bracket">]</span>
-            </a>
-            <a href="mailto:{{ data.basics.email }}">
-                <span class="bracket">[</span> EMAIL <span class="bracket">]</span>
-            </a>
-        </div>
-
-        <div class="hero-stats">
-          <div class="stat-item">
-            <span class="stat-val">{{ data.basics.cf_rank }}</span>
-            <span class="stat-label">CODEFORCES</span>
-          </div>
-          <div class="stat-item">
-            <span class="stat-val">{{ data.basics.cc_rating }}</span>
-            <span class="stat-label">CODECHEF</span>
-          </div>
-          <div class="stat-item">
-            <span class="stat-val">{{ data.basics.cgpa }}</span>
-            <span class="stat-label">CGPA</span>
-          </div>
-          <div class="stat-item">
-            <span class="stat-val">{{ data.basics.problems_solved }}</span>
-            <span class="stat-label">PROBLEMS SOLVED</span>
-          </div>
-        </div>
-
-        <div class="cta-group">
-          <a href="#projects" class="btn btn-primary">INITIATE PROJECTS</a>
-          <a href="#" id="download-resume" class="btn btn-outline"
-            >DOWNLOAD RESUME</a
-          >
+        
+        <div class="sm-socials" aria-label="Social links">
+          <h3 class="sm-socials-title">Identity Links</h3>
+          <ul class="sm-socials-list" role="list">
+            <li class="sm-socials-item">
+              <a href="https://{{ data.basics.github }}" target="_blank" rel="noopener noreferrer" class="sm-socials-link">
+                GitHub
+              </a>
+            </li>
+            <li class="sm-socials-item">
+              <a href="https://{{ data.basics.linkedin }}" target="_blank" rel="noopener noreferrer" class="sm-socials-link">
+                LinkedIn
+              </a>
+            </li>
+            <li class="sm-socials-item">
+              <a href="mailto:{{ data.basics.email }}" class="sm-socials-link">
+                Email
+              </a>
+            </li>
+          </ul>
         </div>
       </div>
-    </section>
+    </aside>
 
-    <section id="about" class="section">
-      <div class="container">
-        <h2 class="section-heading">OPERATIVE PROFILE</h2>
-        <div class="about-grid">
-          <div class="text-col fade-in">
-            <p>{{ data.basics.summary }}</p>
-            <p>
-              Currently specializing in
-              <strong>{{ data.basics.specialization }}</strong>. I approach
-              development with a competitive programming mindset, ensuring
-              efficiency and scalability.
-            </p>
-          </div>
-          <div class="skills-col fade-in">
-            {% for skill in data.skills_bars %}
-            <div class="skill-bar-container">
-              <div class="skill-info">
-                <span>{{ skill.name }}</span>
-                <span>{{ skill.level }}%</span>
-              </div>
-              <div class="progress-bar">
-                <div class="fill" style="width: {{ skill.level }}%"></div>
-              </div>
+  </div>
+
+  <section id="hero" class="hero-section">
+    <div class="hero-content">
+      <p class="overline">ARCHITECTING SCALABLE SOLUTIONS</p>
+      <h1 class="glitch-text" data-text="{{ data.basics.name }}">
+        {{ data.basics.name }}
+      </h1>
+      <div class="subtitle-container">
+        <span class="bracket">[</span>
+        <span id="typed-text"></span>
+        <span class="bracket">]</span>
+      </div>
+
+      <div class="hero-socials">
+        <a href="https://{{ data.basics.github }}" target="_blank">
+          <span class="bracket">[</span> GITHUB <span class="bracket">]</span>
+        </a>
+        <a href="https://{{ data.basics.linkedin }}" target="_blank">
+          <span class="bracket">[</span> LINKEDIN <span class="bracket">]</span>
+        </a>
+        <a href="mailto:{{ data.basics.email }}">
+          <span class="bracket">[</span> EMAIL <span class="bracket">]</span>
+        </a>
+      </div>
+
+      <div class="hero-stats">
+        <div class="stat-item">
+          <span class="stat-val">{{ data.basics.cf_rank }}</span>
+          <span class="stat-label">CODEFORCES</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-val">{{ data.basics.cc_rating }}</span>
+          <span class="stat-label">CODECHEF</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-val">{{ data.basics.cgpa }}</span>
+          <span class="stat-label">CGPA</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-val">{{ data.basics.problems_solved }}</span>
+          <span class="stat-label">PROBLEMS SOLVED</span>
+        </div>
+      </div>
+
+      <div class="cta-group">
+        <a href="#projects" class="btn btn-primary">INITIATE PROJECTS</a>
+        <a href="#" id="download-resume" class="btn btn-outline">DOWNLOAD RESUME</a>
+      </div>
+    </div>
+  </section>
+
+  <section id="about" class="section">
+    <div class="container">
+      <h2 class="section-heading">OPERATIVE PROFILE</h2>
+      <div class="about-grid">
+        <div class="text-col fade-in">
+          <p>{{ data.basics.summary }}</p>
+          <p>
+            Currently specializing in
+            <strong>{{ data.basics.specialization }}</strong>. I approach
+            development with a competitive programming mindset, ensuring
+            efficiency and scalability.
+          </p>
+        </div>
+        <div class="skills-col fade-in">
+          {% for skill in data.skills_bars %}
+          <div class="skill-bar-container">
+            <div class="skill-info">
+              <span>{{ skill.name }}</span>
+              <span>{{ skill.level }}%</span>
             </div>
+            <div class="progress-bar">
+              <div class="fill" style=`width: {{ skill.level }} %`></div>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="experience" class="section dark-alt">
+    <div class="container">
+      <h2 class="section-heading">MISSION LOGS</h2>
+      <div class="timeline">
+        {% for log in data.experience %}
+        <div class="timeline-item fade-in">
+          <div class="timeline-marker"></div>
+          <div class="timeline-content">
+            <div class="date-badge">{{ log.dates }}</div>
+            <h3>{{ log.role }}</h3>
+            <h4>{{ log.company }}</h4>
+            <p>{{ log.description }}</p>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+
+  <section id="projects" class="section">
+    <div class="container">
+      <h2 class="section-heading">SYSTEM MODULES</h2>
+      <div class="project-grid">
+        {% for project in data.projects %}
+        <div class="tech-card fade-in">
+          <div class="card-border"></div>
+          <h3>{{ project.name }}</h3>
+          <p class="desc">{{ project.description }}</p>
+
+          <div class="tags">
+            {% for tech in project.tags %}
+            <span>{{ tech }}</span>
             {% endfor %}
           </div>
-        </div>
-      </div>
-    </section>
 
-    <section id="experience" class="section dark-alt">
-      <div class="container">
-        <h2 class="section-heading">MISSION LOGS</h2>
-        <div class="timeline">
-          {% for log in data.experience %}
-          <div class="timeline-item fade-in">
-            <div class="timeline-marker"></div>
-            <div class="timeline-content">
-              <div class="date-badge">{{ log.dates }}</div>
-              <h3>{{ log.role }}</h3>
-              <h4>{{ log.company }}</h4>
-              <p>{{ log.description }}</p>
-            </div>
+          <div class="project-footer" style="margin-top: 20px">
+            <a href="{{ project.github_url }}" target="_blank" class="btn-link">
+              <span class="bracket">[</span> VIEW SOURCE
+              <span class="bracket">]</span>
+            </a>
           </div>
-          {% endfor %}
         </div>
+        {% endfor %}
       </div>
-    </section>
+    </div>
+  </section>
 
-    <section id="projects" class="section">
-      <div class="container">
-        <h2 class="section-heading">SYSTEM MODULES</h2>
-        <div class="project-grid">
-          {% for project in data.projects %}
-          <div class="tech-card fade-in">
-            <div class="card-border"></div>
-            <h3>{{ project.name }}</h3>
-            <p class="desc">{{ project.description }}</p>
-
-            <div class="tags">
-              {% for tech in project.tags %}
-              <span>{{ tech }}</span>
-              {% endfor %}
-            </div>
-
-            <div class="project-footer" style="margin-top: 20px">
-              <a
-                href="{{ project.github_url }}"
-                target="_blank"
-                class="btn-link"
-              >
-                <span class="bracket">[</span> VIEW SOURCE
-                <span class="bracket">]</span>
-              </a>
-            </div>
-          </div>
-          {% endfor %}
-        </div>
+  <footer id="contact">
+    <div class="footer-content">
+      <h3>{{ data.basics.name }}</h3>
+      <p class="footer-tag">END OF LINE.</p>
+      <div class="socials">
+        <a href="https://{{ data.basics.linkedin }}">LINKEDIN</a>
+        <a href="https://{{ data.basics.github }}">GITHUB</a>
+        <a href="mailto:{{ data.basics.email }}">EMAIL</a>
       </div>
-    </section>
+      <p class="copyright">© 2025 {{ data.basics.name }}.</p>
+    </div>
+  </footer>
 
-    <footer id="contact">
-      <div class="footer-content">
-        <h3>{{ data.basics.name }}</h3>
-        <p class="footer-tag">END OF LINE.</p>
-        <div class="socials">
-          <a href="https://{{ data.basics.linkedin }}">LINKEDIN</a>
-          <a href="https://{{ data.basics.github }}">GITHUB</a>
-          <a href="mailto:{{ data.basics.email }}">EMAIL</a>
-        </div>
-        <p class="copyright">© 2025 {{ data.basics.name }}.</p>
-      </div>
-    </footer>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <script src="/static/staggered-menu.js"></script>
+  <script src="/static/index.js"></script>
+  <script type="module" src="/static/galaxy.js"></script>
+</body>
 
-    <script src="/static/index.js"></script>
-  </body>
 </html>
