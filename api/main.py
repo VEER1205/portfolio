@@ -36,16 +36,21 @@ def get_data():
         g = Github(auth=auth)
         repo = g.get_repo(REPO_NAME)
         contents = repo.get_contents(FILE_PATH)
+        # get_contents() can return a list if the path is ambiguous — take the first item
+        if isinstance(contents, list):
+            contents = contents[0]
         return json.loads(contents.decoded_content.decode())
     except Exception as e:
-        print(f"[WARN] GitHub Error: {e}")
-        print("[INFO] Switching to local file on server...")
+        print(f"[WARN] GitHub fetch failed ({type(e).__name__}): {e}")
+        print("[INFO] Switching to local data.json...")
 
     try:
-        with open(f"{BASE_DIR}/data.json", "r") as f:
+        local_path = BASE_DIR / "data.json"
+        print(f"[INFO] Attempting to read local file: {local_path}")
+        with open(local_path, "r") as f:
             return json.load(f)
     except FileNotFoundError:
-        raise RuntimeError("Critical: data.json not found locally or on GitHub.")
+        raise RuntimeError(f"Critical: data.json not found at {local_path} and GitHub fetch failed.")
             
 
 def save_data(data):
