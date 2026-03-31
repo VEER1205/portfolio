@@ -86,7 +86,8 @@ async def serve_portfolio(request: Request):
             {"request": request, "data": portfolio_data}
         )
     except Exception as e:
-        return HTTPException(status_code=500, detail=str(e)+"Backend fais to load the files")
+        print(f"{e} backend fails to load file ")
+        return HTTPException(status_code=500, detail=str(e)+"Backend fail to load the files")
     
 
 @app.get("/admin", response_class=HTMLResponse)
