@@ -31,7 +31,7 @@ FILE_PATH = "data.json"
 
 def get_data():
     try:
-        auth=Auth.Token(GITHUB_TOKEN)
+        auth = Auth.Token(GITHUB_TOKEN)
         g = Github(auth=auth)
         repo = g.get_repo(REPO_NAME)
         contents = repo.get_contents(FILE_PATH)
@@ -40,16 +40,16 @@ def get_data():
         print(f"[WARN] GitHub Error: {e}")
         print("[INFO] Switching to local file on server...")
 
-        try:
-            with open(f"{BASE_DIR}/data.json", "r") as f:
-                return json.load(f)
-        except FileNotFoundError:
-            print("[ERROR] Critical Error: Local data.json also not found.")
-            return {} 
+    try:
+        with open(f"{BASE_DIR}/data.json", "r") as f:
+            return json.load(f)
+    except FileNotFoundError:
+        raise RuntimeError("Critical: data.json not found locally or on GitHub.")
             
 
 def save_data(data):
-    g = Github(GITHUB_TOKEN)
+    auth = Auth.Token(GITHUB_TOKEN)
+    g = Github(auth=auth)
     repo = g.get_repo(REPO_NAME)
 
     contents = repo.get_contents(FILE_PATH)
