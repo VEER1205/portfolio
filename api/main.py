@@ -7,6 +7,7 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.params import Body
 from fastapi.security import HTTPBasic, HTTPBasicCredentials
 import json
+import traceback
 import os 
 from pathlib import Path
 import secrets
@@ -31,26 +32,38 @@ REPO_NAME = os.getenv("GITHUB_REPO")
 FILE_PATH = "data.json"
 
 def get_data():
-    try:
-        auth = Auth.Token(GITHUB_TOKEN)
-        g = Github(auth=auth)
-        repo = g.get_repo(REPO_NAME)
-        contents = repo.get_contents(FILE_PATH)
-        # get_contents() can return a list if the path is ambiguous — take the first item
-        if isinstance(contents, list):
-            contents = contents[0]
-        return json.loads(contents.decoded_content.decode())
-    except Exception as e:
-        print(f"[WARN] GitHub fetch failed ({type(e).__name__}): {e}")
-        print("[INFO] Switching to local data.json...")
+    # ── Step 1: Try fetching from GitHub ──────────────────────────────────
+    if GITHUB_TOKEN and REPO_NAME:
+        try:
+            auth = Auth.Token(GITHUB_TOKEN)
+            g = Github(auth=auth)
+            repo = g.get_repo(REPO_NAME)
+            contents = repo.get_contents(FILE_PATH)
+            # get_contents() can return a list for root-level files
+            if isinstance(contents, list):
+                contents = contents[0]
+            raw = contents.decoded_content
+            if isinstance(raw, (bytes, bytearray)):
+                return json.loads(raw.decode("utf-8"))
+            return json.loads(raw)
+        except Exception as e:
+            print(f"[WARN] GitHub fetch failed ({type(e).__name__}): {e}")
+            print(traceback.format_exc())
+    else:
+        print("[INFO] GITHUB_TOKEN or REPO_NAME not set — skipping GitHub fetch.")
 
+    # ── Step 2: Fall back to local data.json ──────────────────────────────
+    local_path = BASE_DIR / "data.json"
+    print(f"[INFO] Reading local file: {local_path}")
     try:
-        local_path = BASE_DIR / "data.json"
-        print(f"[INFO] Attempting to read local file: {local_path}")
-        with open(local_path, "r") as f:
+        with open(local_path, "r", encoding="utf-8") as f:
             return json.load(f)
     except FileNotFoundError:
-        raise RuntimeError(f"Critical: data.json not found at {local_path} and GitHub fetch failed.")
+        raise RuntimeError(
+            f"data.json not found at '{local_path}' and GitHub fetch skipped/failed."
+        )
+    except json.JSONDecodeError as e:
+        raise RuntimeError(f"data.json is malformed JSON: {e}")
             
 
 def save_data(data):
@@ -89,8 +102,12 @@ async def serve_portfolio(request: Request):
             {"request": request, "data": portfolio_data}
         )
     except Exception as e:
-        print(f"{e} backend fails to load file ")
-        raise HTTPException(status_code=500, detail=str(e)+"Backend fail to load the files")
+        tb = traceback.format_exc()
+        print(f"[ERROR] serve_portfolio failed: {e}\n{tb}")
+        raise HTTPException(
+            status_code=500,
+            detail=f"{type(e).__name__}: {e} | TRACEBACK: {tb}"
+        )
     
 
 @app.get("/admin", response_class=HTMLResponse)
