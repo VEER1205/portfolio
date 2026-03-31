@@ -1,5 +1,7 @@
 from fastapi import FastAPI, Request, HTTPException, Depends
 from fastapi.responses import HTMLResponse
+from fastapi.exceptions import RequestValidationError
+from starlette.exceptions import HTTPException as StarletteHTTPException
 from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles
 from fastapi.params import Body
@@ -160,4 +162,33 @@ async def preview_portfolio(request: Request, username: str = Depends(verify_adm
     return templates.TemplateResponse(
         "portfolio.html",
         {"request": request, "data": portfolio_data}
+    )
+
+
+# ── Custom Error Handlers ──────────────────────────────────────────────────
+
+@app.exception_handler(StarletteHTTPException)
+async def custom_http_exception_handler(request: Request, exc: StarletteHTTPException):
+    """Render a styled error page for HTTP errors (404, 403, etc.)"""
+    if exc.status_code == 404:
+        return templates.TemplateResponse(
+            "404.html",
+            {"request": request},
+            status_code=404
+        )
+    # For other HTTP errors, still return a styled 404-like page with the real code
+    return templates.TemplateResponse(
+        "404.html",
+        {"request": request},
+        status_code=exc.status_code
+    )
+
+
+@app.exception_handler(RequestValidationError)
+async def validation_exception_handler(request: Request, exc: RequestValidationError):
+    """Render a styled error page for validation errors"""
+    return templates.TemplateResponse(
+        "404.html",
+        {"request": request},
+        status_code=422
     )

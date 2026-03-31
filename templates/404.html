@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>404 — Signal Lost</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Roboto:wght@300;400;500&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="/static/style.css" />
+  <style>
+    /* ── 404-specific overrides ── */
+    body {
+      overflow: hidden;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Scanline overlay */
+    .scan-line {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 3px,
+        rgba(255, 42, 42, 0.02) 3px,
+        rgba(255, 42, 42, 0.02) 4px
+      );
+      pointer-events: none;
+      z-index: 0;
+      animation: scanMove 8s linear infinite;
+    }
+
+    @keyframes scanMove {
+      0%   { background-position: 0 0; }
+      100% { background-position: 0 100px; }
+    }
+
+    /* Animated grid */
+    .background-grid {
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(255,42,42,0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,42,42,0.04) 1px, transparent 1px);
+      background-size: 60px 60px;
+      z-index: -1;
+      animation: gridPulse 4s ease-in-out infinite;
+    }
+
+    @keyframes gridPulse {
+      0%, 100% { opacity: 0.5; }
+      50%       { opacity: 1; }
+    }
+
+    /* ── Main content ── */
+    .error-container {
+      position: relative;
+      z-index: 10;
+      text-align: center;
+      padding: 40px 20px;
+      max-width: 700px;
+    }
+
+    /* Big glitch 404 */
+    .error-code {
+      font-family: var(--font-head);
+      font-size: clamp(6rem, 20vw, 14rem);
+      font-weight: 700;
+      color: white;
+      line-height: 1;
+      position: relative;
+      display: inline-block;
+      letter-spacing: -4px;
+      animation: glitchMain 3s infinite;
+    }
+
+    .error-code::before,
+    .error-code::after {
+      content: attr(data-text);
+      position: absolute;
+      inset: 0;
+      font-family: var(--font-head);
+      font-size: inherit;
+      font-weight: 700;
+      letter-spacing: inherit;
+    }
+
+    .error-code::before {
+      color: #ff2a2a;
+      animation: glitchRed 3s infinite;
+      clip-path: polygon(0 20%, 100% 20%, 100% 40%, 0 40%);
+    }
+
+    .error-code::after {
+      color: #00cfff;
+      animation: glitchBlue 3s infinite;
+      clip-path: polygon(0 60%, 100% 60%, 100% 75%, 0 75%);
+    }
+
+    @keyframes glitchMain {
+      0%, 92%, 100% { transform: none; }
+      93%  { transform: skewX(-2deg) translateX(4px); }
+      95%  { transform: skewX(2deg) translateX(-4px); }
+      97%  { transform: skewX(-1deg); }
+    }
+
+    @keyframes glitchRed {
+      0%, 92%, 100% { transform: none; opacity: 0; }
+      93%  { transform: translateX(-6px) skewX(-4deg); opacity: 0.9; }
+      95%  { transform: translateX(4px) skewX(3deg); opacity: 0.9; }
+      97%  { transform: translateX(0); opacity: 0; }
+    }
+
+    @keyframes glitchBlue {
+      0%, 90%, 100% { transform: none; opacity: 0; }
+      91%  { transform: translateX(6px) skewX(4deg); opacity: 0.85; }
+      94%  { transform: translateX(-4px); opacity: 0.85; }
+      96%  { transform: none; opacity: 0; }
+    }
+
+    /* Status badge */
+    .error-status {
+      font-family: var(--font-head);
+      color: var(--accent-red);
+      letter-spacing: 4px;
+      font-size: 1rem;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--accent-red);
+      box-shadow: 0 0 8px var(--accent-red);
+      animation: blink 1s step-end infinite;
+    }
+
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50%       { opacity: 0; }
+    }
+
+    /* Error title & message */
+    .error-title {
+      font-family: var(--font-head);
+      font-size: 1.8rem;
+      font-weight: 600;
+      color: white;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      margin-bottom: 16px;
+    }
+
+    .error-message {
+      color: var(--text-dim);
+      font-size: 1rem;
+      line-height: 1.8;
+      margin-bottom: 40px;
+      max-width: 480px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    /* Terminal readout */
+    .terminal-box {
+      background: rgba(10, 10, 10, 0.8);
+      border: 1px solid #1e1e1e;
+      border-left: 3px solid var(--accent-red);
+      padding: 16px 20px;
+      margin: 0 auto 40px;
+      max-width: 440px;
+      text-align: left;
+      font-family: 'Courier New', monospace;
+      font-size: 0.82rem;
+      color: var(--text-dim);
+      position: relative;
+    }
+
+    .terminal-line {
+      margin: 4px 0;
+      display: flex;
+      gap: 10px;
+    }
+
+    .terminal-prompt { color: var(--accent-red); }
+    .terminal-output { color: #e0e0e0; }
+    .terminal-error  { color: #ff6b6b; }
+
+    .terminal-cursor {
+      display: inline-block;
+      width: 8px;
+      height: 14px;
+      background: var(--accent-red);
+      vertical-align: middle;
+      animation: blink 1s step-end infinite;
+    }
+
+    /* CTA buttons */
+    .cta-group {
+      display: flex;
+      gap: 20px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    /* HUD decorations */
+    .hud-bracket {
+      position: absolute;
+      width: 40px;
+      height: 40px;
+      opacity: 0.6;
+    }
+
+    .hud-bracket.tl { top: 0; left: 0; border-top: 2px solid var(--accent-red); border-left: 2px solid var(--accent-red); }
+    .hud-bracket.tr { top: 0; right: 0; border-top: 2px solid var(--accent-red); border-right: 2px solid var(--accent-red); }
+    .hud-bracket.bl { bottom: 0; left: 0; border-bottom: 2px solid var(--accent-red); border-left: 2px solid var(--accent-red); }
+    .hud-bracket.br { bottom: 0; right: 0; border-bottom: 2px solid var(--accent-red); border-right: 2px solid var(--accent-red); }
+
+    /* Floating particles */
+    .particles {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      overflow: hidden;
+    }
+
+    .particle {
+      position: absolute;
+      width: 2px;
+      height: 2px;
+      background: var(--accent-red);
+      border-radius: 50%;
+      opacity: 0;
+      animation: float var(--dur, 6s) var(--delay, 0s) ease-in infinite;
+    }
+
+    @keyframes float {
+      0%   { transform: translateY(100vh) scale(0); opacity: 0; }
+      10%  { opacity: 0.6; }
+      90%  { opacity: 0.3; }
+      100% { transform: translateY(-10vh) scale(1.5); opacity: 0; }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Galaxy WebGL Background -->
+  <div id="galaxy-bg"></div>
+
+  <!-- Scanline + Grid -->
+  <div class="scan-line"></div>
+  <div class="background-grid"></div>
+
+  <!-- Floating particles -->
+  <div class="particles" id="particles"></div>
+
+  <!-- HUD Corners -->
+  <div class="hud-corner bottom-left">MUMBAI, IN</div>
+  <div class="hud-corner bottom-right">ERR: 404</div>
+
+  <!-- Main Error Content -->
+  <div class="error-container">
+    <!-- Corner brackets -->
+    <div class="hud-bracket tl"></div>
+    <div class="hud-bracket tr"></div>
+    <div class="hud-bracket bl"></div>
+    <div class="hud-bracket br"></div>
+
+    <div class="error-status">
+      <span class="status-dot"></span>
+      SYSTEM ALERT — PAGE NOT FOUND
+      <span class="status-dot"></span>
+    </div>
+
+    <div class="error-code" data-text="404">404</div>
+
+    <h1 class="error-title">Signal Lost</h1>
+
+    <p class="error-message">
+      The coordinates you entered don't exist in this sector.
+      The resource may have been moved, destroyed, or never existed in this timeline.
+    </p>
+
+    <div class="terminal-box">
+      <div class="terminal-line">
+        <span class="terminal-prompt">&gt;</span>
+        <span class="terminal-output">SCANNING ROUTE...</span>
+      </div>
+      <div class="terminal-line">
+        <span class="terminal-prompt">&gt;</span>
+        <span class="terminal-error">ERROR: PATH NOT RESOLVED</span>
+      </div>
+      <div class="terminal-line">
+        <span class="terminal-prompt">&gt;</span>
+        <span class="terminal-output">STATUS: 404 | SIGNAL LOST</span>
+      </div>
+      <div class="terminal-line">
+        <span class="terminal-prompt">&gt;</span>
+        <span class="terminal-output">RECOMMENDATION: RETURN TO BASE <span class="terminal-cursor"></span></span>
+      </div>
+    </div>
+
+    <div class="cta-group">
+      <a href="/" class="btn btn-primary">RETURN TO BASE</a>
+      <a href="/#contact" class="btn btn-outline">CONTACT HQ</a>
+    </div>
+  </div>
+
+  <script type="module" src="/static/galaxy.js"></script>
+  <script>
+    // Spawn floating particles
+    const container = document.getElementById('particles');
+    for (let i = 0; i < 30; i++) {
+      const p = document.createElement('div');
+      p.className = 'particle';
+      p.style.left = Math.random() * 100 + 'vw';
+      p.style.setProperty('--dur', (4 + Math.random() * 8) + 's');
+      p.style.setProperty('--delay', (Math.random() * 6) + 's');
+      container.appendChild(p);
+    }
+  </script>
+</body>
+
+</html>
