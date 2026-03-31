@@ -79,12 +79,15 @@ def verify_admin(credentials: HTTPBasicCredentials = Depends(security)):
 
 @app.get("/", response_class=HTMLResponse)
 async def serve_portfolio(request: Request):
-    """Serve the main portfolio page"""
-    portfolio_data = get_data()
-    return templates.TemplateResponse(
-        "portfolio.html", 
-        {"request": request, "data": portfolio_data}
-    )
+    try:
+        portfolio_data = get_data()
+        return templates.TemplateResponse(
+            "portfolio.html", 
+            {"request": request, "data": portfolio_data}
+        )
+    except Exception as e:
+        return HTTPException(status_code=500, detail=str(e)+"Backend fais to load the files")
+    
 
 @app.get("/admin", response_class=HTMLResponse)
 async def admin_panel(request: Request, username: str = Depends(verify_admin)):
@@ -106,7 +109,6 @@ async def update_portfolio_data(
     username: str = Depends(verify_admin),
     data: dict = Body(...)
 ):
-    """API endpoint to update portfolio data"""
     try:
         # data = await request.json()
         # print("Received data for update:", data)
