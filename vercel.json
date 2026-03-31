@@ -1,22 +1,16 @@
 {
-  "builds": [
-    {
-      "src": "api/main.py",
-      "use": "@vercel/python"
-    }
-  ],
   "rewrites": [
     {
       "source": "/static/(.*)",
       "destination": "/static/$1"
     },
     {
-      "source": "/(.*)",
-      "destination": "api/main.py"
+      "source": "/templates/admin.html",
+      "destination": "/api/admin"
     },
     {
-        "source": "/templates/admin.html",
-        "destination": "/api/admin"
+      "source": "/(.*)",
+      "destination": "/api/main.py"
     }
   ]
 }
