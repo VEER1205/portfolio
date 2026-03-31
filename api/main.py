@@ -1,5 +1,5 @@
 from fastapi import FastAPI, Request, HTTPException, Depends
-from fastapi.responses import HTMLResponse
+from fastapi.responses import HTMLResponse, JSONResponse
 from fastapi.exceptions import RequestValidationError
 from starlette.exceptions import HTTPException as StarletteHTTPException
 from fastapi.templating import Jinja2Templates
@@ -168,20 +168,21 @@ async def preview_portfolio(request: Request, username: str = Depends(verify_adm
 
 @app.exception_handler(StarletteHTTPException)
 async def custom_http_exception_handler(request: Request, exc: StarletteHTTPException):
-    """Render a styled error page for 404s only; all other HTTP errors pass through normally."""
+    """Render a styled error page for 404s; pass-through everything else with correct headers."""
     if exc.status_code == 404:
         return templates.TemplateResponse(
             "404.html",
             {"request": request},
             status_code=404
         )
-    # Re-raise so FastAPI's default handler deals with 401, 403, 500, etc.
-    # This preserves WWW-Authenticate headers needed for HTTP Basic Auth on /admin.
-    from fastapi.responses import JSONResponse
+
+    # For 401 / 403 (HTTP Basic Auth challenges), forward the WWW-Authenticate header
+    # so the browser shows the native login dialog instead of an error page.
+    headers = dict(exc.headers) if exc.headers else {}
     return JSONResponse(
         status_code=exc.status_code,
         content={"detail": exc.detail},
-        headers=dict(exc.headers) if exc.headers else None,
+        headers=headers if headers else None,
     )
 
 
