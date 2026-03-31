@@ -11,7 +11,6 @@ import os
 from pathlib import Path
 import secrets
 from datetime import datetime
-import shutil
 from dotenv import load_dotenv
 from github import Github,Auth
 
@@ -169,18 +168,20 @@ async def preview_portfolio(request: Request, username: str = Depends(verify_adm
 
 @app.exception_handler(StarletteHTTPException)
 async def custom_http_exception_handler(request: Request, exc: StarletteHTTPException):
-    """Render a styled error page for HTTP errors (404, 403, etc.)"""
+    """Render a styled error page for 404s only; all other HTTP errors pass through normally."""
     if exc.status_code == 404:
         return templates.TemplateResponse(
             "404.html",
             {"request": request},
             status_code=404
         )
-    # For other HTTP errors, still return a styled 404-like page with the real code
-    return templates.TemplateResponse(
-        "404.html",
-        {"request": request},
-        status_code=exc.status_code
+    # Re-raise so FastAPI's default handler deals with 401, 403, 500, etc.
+    # This preserves WWW-Authenticate headers needed for HTTP Basic Auth on /admin.
+    from fastapi.responses import JSONResponse
+    return JSONResponse(
+        status_code=exc.status_code,
+        content={"detail": exc.detail},
+        headers=dict(exc.headers) if exc.headers else None,
     )
 
 
