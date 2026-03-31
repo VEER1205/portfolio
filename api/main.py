@@ -98,8 +98,9 @@ async def serve_portfolio(request: Request):
     try:
         portfolio_data = get_data()
         return templates.TemplateResponse(
-            "portfolio.html", 
-            {"request": request, "data": portfolio_data}
+            request,
+            "portfolio.html",
+            {"data": portfolio_data}
         )
     except Exception as e:
         tb = traceback.format_exc()
@@ -115,8 +116,9 @@ async def admin_panel(request: Request, username: str = Depends(verify_admin)):
     """Serve the admin panel"""
     portfolio_data = get_data()
     return templates.TemplateResponse(
+        request,
         "admin.html",
-        {"request": request, "data": portfolio_data, "username": username}
+        {"data": portfolio_data, "username": username}
     )
 
 @app.get("/api/data")
@@ -181,8 +183,9 @@ async def preview_portfolio(request: Request, username: str = Depends(verify_adm
     """Preview portfolio with current data"""
     portfolio_data = get_data()
     return templates.TemplateResponse(
+        request,
         "portfolio.html",
-        {"request": request, "data": portfolio_data}
+        {"data": portfolio_data}
     )
 
 
@@ -193,8 +196,9 @@ async def custom_http_exception_handler(request: Request, exc: StarletteHTTPExce
     """Render a styled error page for 404s; pass-through everything else with correct headers."""
     if exc.status_code == 404:
         return templates.TemplateResponse(
+            request,
             "404.html",
-            {"request": request},
+            {},
             status_code=404
         )
 
@@ -212,7 +216,8 @@ async def custom_http_exception_handler(request: Request, exc: StarletteHTTPExce
 async def validation_exception_handler(request: Request, exc: RequestValidationError):
     """Render a styled error page for validation errors"""
     return templates.TemplateResponse(
+        request,
         "404.html",
-        {"request": request},
+        {},
         status_code=422
     )
