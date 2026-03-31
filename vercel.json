@@ -12,5 +12,10 @@
       "source": "/(.*)",
       "destination": "/api/main.py"
     }
-  ]
+  ],
+  "functions": {
+    "api/**/*.py": {
+      "includeFiles": "{templates/**,static/**,backups/**}"
+    }
+  }
 }

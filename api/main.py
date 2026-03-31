@@ -16,7 +16,9 @@ from github import Github
 app = FastAPI()
 BASE_DIR = Path(__file__).resolve().parent.parent
 templates = Jinja2Templates(directory=f"{BASE_DIR}/templates")
-app.mount("/static", StaticFiles(directory=f"{BASE_DIR}/static"), name="static")
+static_dir = BASE_DIR / "static"
+if static_dir.exists():
+    app.mount("/static", StaticFiles(directory=str(static_dir)), name="static")
 security = HTTPBasic()
 
 load_dotenv()
@@ -117,14 +119,17 @@ async def update_portfolio_data(
 @app.get("/api/backups")
 async def list_backups(username: str = Depends(verify_admin)):
     """List all available backups"""
-    backup_dir = "backups"
-    if not os.path.exists(backup_dir):
+    # Use BASE_DIR so Vercel can find the folder
+    backup_dir = BASE_DIR / "backups" 
+    
+    if not backup_dir.exists():
         return {"backups": []}
     
     backups = []
-    for filename in sorted(os.listdir(backup_dir), reverse=True):
+    # Convert Path object to string for os.listdir
+    for filename in sorted(os.listdir(str(backup_dir)), reverse=True):
         if filename.startswith("data_backup_") and filename.endswith(".json"):
-            filepath = os.path.join(backup_dir, filename)
+            filepath = backup_dir / filename
             backups.append({
                 "filename": filename,
                 "size": os.path.getsize(filepath),
@@ -136,9 +141,10 @@ async def list_backups(username: str = Depends(verify_admin)):
 @app.post("/api/restore/{filename}")
 async def restore_backup(filename: str, username: str = Depends(verify_admin)):
     """Restore from a backup file"""
-    backup_path = os.path.join("backups", filename)
+    # Use BASE_DIR so Vercel can find the file
+    backup_path = BASE_DIR / "backups" / filename
     
-    if not os.path.exists(backup_path):
+    if not backup_path.exists():
         raise HTTPException(status_code=404, detail="Backup not found")
     
     try:
