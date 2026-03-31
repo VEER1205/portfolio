@@ -11,7 +11,7 @@ import secrets
 from datetime import datetime
 import shutil
 from dotenv import load_dotenv
-from github import Github
+from github import Github,Auth
 
 app = FastAPI()
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -29,27 +29,24 @@ GITHUB_TOKEN = os.getenv("GITHUB_TOKEN")
 REPO_NAME = os.getenv("GITHUB_REPO")
 FILE_PATH = "data.json"
 
-import json
-
 def get_data():
     try:
-        # 1. Attempt to fetch from GitHub
-        g = Github(GITHUB_TOKEN)
+        auth=Auth.Token(GITHUB_TOKEN)
+        g = Github(auth=auth)
         repo = g.get_repo(REPO_NAME)
         contents = repo.get_contents(FILE_PATH)
         return json.loads(contents.decoded_content.decode())
-        
     except Exception as e:
-        # 2. If GitHub fails, print error and fall back to local file
         print(f"[WARN] GitHub Error: {e}")
         print("[INFO] Switching to local file on server...")
-        
+
         try:
             with open(f"{BASE_DIR}/data.json", "r") as f:
                 return json.load(f)
         except FileNotFoundError:
             print("[ERROR] Critical Error: Local data.json also not found.")
             return {} 
+            
 
 def save_data(data):
     g = Github(GITHUB_TOKEN)
@@ -87,7 +84,7 @@ async def serve_portfolio(request: Request):
         )
     except Exception as e:
         print(f"{e} backend fails to load file ")
-        return HTTPException(status_code=500, detail=str(e)+"Backend fail to load the files")
+        raise HTTPException(status_code=500, detail=str(e)+"Backend fail to load the files")
     
 
 @app.get("/admin", response_class=HTMLResponse)
@@ -111,8 +108,6 @@ async def update_portfolio_data(
     data: dict = Body(...)
 ):
     try:
-        # data = await request.json()
-        # print("Received data for update:", data)
         save_data(data)
         return {"success": True, "message": "Data updated successfully"}
     except Exception as e:
